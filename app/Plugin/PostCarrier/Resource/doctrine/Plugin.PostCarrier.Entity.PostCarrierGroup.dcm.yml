@@ -1,0 +1,29 @@
+Plugin\PostCarrier\Entity\PostCarrierGroup:
+    type: entity
+    table: plg_postcarrier_csv_customer_group
+    repositoryClass: Plugin\PostCarrier\Repository\PostCarrierGroupRepository
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            column: group_id
+            generator:
+                strategy: AUTO
+    fields:
+        group_name:
+            type: text
+            nullable: false
+        del_flg:
+            type: smallint
+            nullable: false
+            unsigned: false
+            default: '0'
+        create_date:
+            type: datetime
+            nullable: false
+        update_date:
+            type: datetime
+            nullable: false
+    lifecycleCallbacks: {  }

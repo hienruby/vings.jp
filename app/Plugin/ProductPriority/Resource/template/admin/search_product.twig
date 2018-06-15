@@ -1,0 +1,110 @@
+{% if app.session.flashBag.has('eccube.admin.success') %}
+    <div class="padT10">
+    {% for message in app.session.flashBag.get('eccube.admin.success') %}
+        <div class="alert alert-success alert-dismissable alert-section">
+            <button type="button" class="close" data-dismiss="alert"><span class="alert-close" aria-hidden="true">&times;</span></button>
+            <svg class="cb cb-info-circle"> <use xlink:href="#cb-info-circle" /></svg> {{ message|trans }}
+        </div>
+    {% endfor %}
+    </div>
+{% endif %}
+
+{% if pagination.totalItemCount > 0 %}
+    <script>
+        // 登録ボタンの表示
+        $('#register-checked').removeClass('hidden');
+
+        // 商品検索(ページング)
+        $('#pagination_wrap a').on('click', function (event) {
+            $('#register-checked').addClass('hidden');
+            $('#searchProductModalList').html(
+                    '<div class="no-padding">' +
+                    '<div class="data-empty">' +
+                    '<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...' +
+                    '</div>' +
+                    '</div>'
+            );
+            $.ajax({
+                type: 'GET',
+                dataType: 'html',
+                url: $(this).attr('href'),
+                success: function (data) {
+                    // モーダルに結果を書き出し.
+                    $('#searchProductModalList').html(data);
+                    // pager.twigのbox-footerは不要なため除外
+                    $('#pagination_wrap').removeClass('box-footer');
+                },
+                error: function () {
+                    alert('search product failed.');
+                }
+            });
+            // aタグの無効化
+            event.preventDefault();
+        });
+
+        // チェックボックスの全選択/全解除
+        $('#toggle-register-check-all').on('click', function () {
+            var checkall = $(this).prop('checked');
+            if (checkall) {
+                $('input[id^=register-check-]').prop('checked', true)
+                        .parent()
+                        .parent()
+                        .addClass('checked');
+            } else {
+                $('input[id^=register-check-]').prop('checked', false)
+                        .parent()
+                        .parent()
+                        .removeClass('checked');
+            }
+        });
+
+        // チェックボックス選択時に行の背景色を切り替える
+        $("input[id^=register-check-]").on('change', function () {
+            var $checkbox = $(this);
+            var $tr = $checkbox.parent().parent();
+            var checked = $checkbox.prop('checked');
+            if (checked) {
+                $tr.addClass('checked');
+            } else {
+                $tr.removeClass('checked');
+            }
+        });
+    </script>
+    <table class="table table-hover">
+        <thead style="background-color: #F9F9F9;">
+        <tr>
+            <td>商品ID</td>
+            <td>商品名</td>
+            <td class="text-left"><input type="checkbox" id="toggle-register-check-all"></td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for Product in pagination %}
+            <tr>
+                <td class="vertical-align-middle">
+                    {{ Product.id }}
+                </td>
+                <td class="vertical-align-middle">
+                    {{ Product.name }}
+                    {% if Product.hasProductClass %}
+                        <span><br/>{{ Product.code_min }}～{{ Product.code_max }}</span>
+                    {% else %}
+                        <span><br/>{{ Product.code_min }}</span>
+                    {% endif %}
+                </td>
+                <td class="vertical-align-middle text-left">
+                    <input type="checkbox" id="register-check-{{ Product.id }}" data-productid="{{ Product.id }}">
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {#ページャ#}
+    {% include "pager.twig" with {'pages': pagination.paginationData, 'routes': 'admin_product_priority_search'} %}
+{% else %}
+    <div class="no-padding">
+        <div class="data-empty">
+            <p>検索条件に該当するデータがありませんでした。</p>
+        </div>
+    </div><!-- /.box-body -->
+{% endif %}

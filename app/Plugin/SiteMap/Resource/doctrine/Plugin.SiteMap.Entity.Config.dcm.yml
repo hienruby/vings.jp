@@ -1,0 +1,18 @@
+Plugin\SiteMap\Entity\Config:
+    type: entity
+    table: plg_sitemap_dtb_config
+    repositoryClass: Plugin\SiteMap\Repository\ConfigRepository
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+    fields:
+        changefreq:
+            type: text
+            nullable: true
+        priority:
+            type: text
+            nullable: true
+    lifecycleCallbacks: {  }

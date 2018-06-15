@@ -1,0 +1,36 @@
+@charset "UTF-8";
+
+#detail_box__job,
+#detail_box__company_name,
+#detail_box__fax,
+#confirm_box__company_name,
+#confirm_box__fax,
+#confirm_box__job,
+#top_box__company_name,
+#top_box__fax,
+#top_box__job {
+  display: none;
+}
+#top_box__body_inner {
+  margin-bottom: 0;
+}
+#top_box__birth {
+  border-top: none;
+  margin: 0;
+}
+.registration_page .extra-form,
+.extra-form {
+  margin-top: 0;
+  border-top: none;
+}
+.registration_page .dl_table {
+  margin-bottom: 0;
+}
+.registration_page .dl_table:last-child {
+  margin-bottom: 32px;
+}
+.mypage .dl_table:not(:first-child),
+.registration_page .dl_table:not(:first-child) {
+  border-top: none;
+  margin-top: 0;
+}

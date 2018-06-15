@@ -1,0 +1,7 @@
+name: 商品公開非公開プラグイン
+code: PlgSwitchProductDispFlg
+version: 1.0.0
+event: PlgSwitchProductDispFlgEvent
+service:
+    - PlgSwitchProductDispFlgServiceProvider
+

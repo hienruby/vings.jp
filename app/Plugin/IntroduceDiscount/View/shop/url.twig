@@ -1,0 +1,38 @@
+<div class="affiliate_urls" style="border: solid 1px; border-color: gray;">
+    <h3 class="heading02">この商品のご紹介について</h3>
+
+    <div >LineやFacebookなどのSNSでお友達などに紹介し成果があれば、もれなく割引券を進呈します！いまなら{{ point1 }} ％割引中！！
+        <ul>
+        {% if 0 < point2 %}
+            <li>さらに招待された方にも割引実施中！（対象の商品が {{ point2 }} ％割引！）
+            </li>
+        {% endif %}
+        </ul>
+        <div>
+            <script type="text/javascript" src="//media.line.me/js/line-button.js?v=20140411" ></script>
+            <script type="text/javascript">
+                new media_line_me.LineButton({"pc":false,"lang":"ja","type":"a","text":"{% if 0 < point2 %}今ならこの商品を買うと{{ point2 }} ％割引中！ {% endif %}{{ url }}","withUrl":false});
+            </script>
+        </div>
+        <span>
+            <a href="https://twitter.com/share" class="twitter-share-button"{count} data-url="{{ url }}" data-text="{% if 0 < point2 %}今ならこの商品を買うと{{ point2 }} ％割引中！ {% endif %}">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </span>
+        <span>
+            <div id="fb-root"></div>
+            <script>(function(d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0];
+                    if (d.getElementById(id)) return;
+                    js = d.createElement(s); js.id = id;
+                    js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.5";
+                    fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk'));</script>
+            <div class="fb-share-button" data-href="{{ url }}" data-layout="button_count"></div>
+        </span>
+        <div>
+        <div><br/>以下のURLをコピーして紹介できます。
+            <input type="text" value="{{ url }}" style="cursor: pointer;" onmouseup="this.selectionStart = 0;this.selectionEnd = this.value.length;"/>
+        </div>
+            <br/>
+        </div>
+    </div>
+</div>

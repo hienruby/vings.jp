@@ -1,0 +1,761 @@
+{% extends 'default_frame.twig' %}
+
+{% set body_class = 'product_page' %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{{ app.config.user_data_urlpath }}/css/product_detail.css?v={{ constant('Eccube\\Common\\Constant::VERSION') }}">
+{% endblock %}
+
+{% block javascript %}
+<style>
+<!-- bodyCSS -->
+h1{
+	font-size:18px;
+	line-height:21px;
+}
+h2{
+	font-size:12px;
+	font-weight: normal;
+}
+body{
+}
+td, th{
+	padding: 5px;
+}
+.accordion{
+	padding-top:10px;
+}
+.affiliate_urls{
+	display:none;
+}
+.item_comment {
+	color: rgba(107, 29, 34, 0.83);
+	text-align: center;
+}
+.h-name {
+	color: #8D553A;
+	line-height: 18px;
+}
+.cart_area .classcategory_list li select {
+	width: 100%;
+	font-size: 12px;
+}
+#item_detail table br{display:bock;}
+.item_comment img{
+	width:100%;
+	height:100%;
+}
+.product_tag_list {
+	font-size: 100%;
+	color: #fff;
+	border: solid 1px #fd7436;
+	background-color: #ff7434;
+	font-size: 14px;
+}
+.relative_cat li a {
+	padding: 0 0.5em;
+	display: inline-block;
+	color: #563924;
+}
+.btn-success:hover {
+	color: #fff;
+	background-color: #ec9a6e;
+	border-color: initial;
+}
+.gui{
+	padding: 5px 0px;
+	line-height: 18px;
+}
+#item_detail_area .item_detail p {
+	margin: 5px 0;
+}
+.item_name1 {
+    padding: 0;
+    margin: 0;
+    margin-bottom: 8px;
+    font-size: 20px;
+}
+.product_tag_list {
+	margin-bottom: 8px;
+}
+.btn-info {
+	border-color: #fff;
+	color: #fff;
+	background-color: #e26e38;
+}
+#favorite{
+	background: #661800;
+	border: none;
+	border-radius: 5px;
+}
+#add-cart{
+	background: #ff7434;
+	border-radius: 5px;
+	border: none;
+}
+.relative_cat li:first-child a {
+	padding-left: 0;
+	font-size: 12px;
+	color: #563924;
+	font-weight: bold;
+	line-height: 18px;
+}
+fieldset[disabled] .btn-info.active {
+	background-color: #f0ad4e;
+	border-color: #f0ad4e;
+}
+#related_product_area .item_price + .item_comment {
+	margin-top: 0;
+}
+#related_product_area .slick-next, #related_product_area .slick-prev {
+	font-size: 20px;
+	top: -35px;
+}
+#related_product_area .slick-prev .cb, #related_product_area .slick-next .cb {
+	font-size: 20px;
+	top: -6px;
+}
+#related_product_area .angle-circle {
+	width: 28px;
+	height: 28px;
+	margin-top: 0;
+}
+#related_product_area .heading03 {
+	padding-top: 5px;
+	font-size: 16px;
+}
+#detail_wrap{padding-bottom:0;}
+.freearea img {
+	max-width: 100%;
+	height: 100%;
+}
+dl.quantity dt {
+	min-height: 35px;
+	line-height: 30px;
+}
+.btn-info, .btn-primary {
+	font-size: 12px;
+}
+.btn-success, btn-success:active {
+	background: none;
+	color: black;
+	border: none;
+	font-weight:normal;
+	font-size:11px;
+	margin-bottom:2px;
+	border:1px solid #CACACA;
+	border-radius:5px;
+}
+.slick-slider {
+	margin-bottom: 0px;
+}
+
+.cart_area {
+	padding-top: 0px;
+}
+#item_detail_area .item_detail .item_code {
+	padding: 5px 0;
+	border-top: 1px dotted #ccc;
+}
+#item_detail_area .item_detail .relative_cat {
+	padding: 5px 0;
+	border-top: 1px dotted #ccc;
+	border-bottom: 1px dotted #ccc;
+}
+#item_detail_area .item_detail .sale_price {
+	font-size: 18px;
+}
+
+.flickity-enabled {
+	position: relative;
+}
+
+.flickity-enabled:focus { outline: none; }
+
+.flickity-viewport {
+	overflow: hidden;
+	position: relative;
+	height: 100%;
+}
+
+.flickity-slider {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+/* draggable */
+
+.flickity-enabled.is-draggable {
+	-webkit-tap-highlight-color: transparent;
+	tap-highlight-color: transparent;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.flickity-enabled.is-draggable .flickity-viewport {
+	cursor: move;
+	cursor: -webkit-grab;
+	cursor: grab;
+}
+.flickity-enabled.is-draggable .flickity-viewport.is-pointer-down {
+	cursor: -webkit-grabbing;
+	cursor: grabbing;
+}
+
+/* ---- previous/next buttons ---- */
+
+.flickity-prev-next-button {
+	position: absolute;
+	top: 50%;
+	width: 30px;
+	height: 30px;
+	border: none;
+	border-radius: 50%;
+	background: white;
+	background: hsla(0, 0%, 100%, 0.75);
+	cursor: pointer;
+	/* vertically center */
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+.flickity-prev-next-button:hover { background: white; }
+
+.flickity-prev-next-button:focus {
+	outline: none;
+	box-shadow: 0 0 0 5px #09F;
+}
+
+.flickity-prev-next-button:active {
+	opacity: 0.6;
+}
+
+.flickity-prev-next-button.previous { left: 0; }
+.flickity-prev-next-button.next { right: 0; }
+/* right to left */
+.flickity-rtl .flickity-prev-next-button.previous {
+	left: auto;
+	right: 0;
+}
+.flickity-rtl .flickity-prev-next-button.next {
+	right: auto;
+	left: 0;
+}
+
+.flickity-prev-next-button:disabled {
+	opacity: 0.3;
+	cursor: auto;
+}
+
+.flickity-prev-next-button svg {
+position: absolute;
+	left: 20%;
+	top: 20%;
+	width: 60%;
+	height: 60%;
+}
+
+.flickity-prev-next-button .arrow {
+	fill: #333;
+}
+
+/* ---- page dots ---- */
+
+.flickity-page-dots {
+	position: absolute;
+	width: 100%;
+	bottom: -25px;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	text-align: center;
+	line-height: 1;
+}
+
+.flickity-rtl .flickity-page-dots { direction: rtl; }
+
+.flickity-page-dots .dot {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	margin: 0 8px;
+	background: #333;
+	border-radius: 50%;
+	opacity: 0.25;
+	cursor: pointer;
+}
+
+.flickity-page-dots .dot.is-selected {
+	opacity: 1;
+}
+@media screen and (max-width: 767px){
+.flickity-enabled {position: absolute;bottom: 5px;}
+.slick-dots {position: absolute;bottom: 5px;}
+.flickity-slider {transform: none !important;}
+.flickity-prev-next-button{display: none !important;}
+.flickity-enabled .flickity-slider > li {
+	left: auto !important;
+	position: relative !important;
+}
+}
+
+#item_photo_area .slick-dots.flickity-enabled {
+	margin: auto;
+}
+.kato{
+	font-size:13px;
+}
+<!-- レビューボタンCSS -->
+#product_review_area dl dt .cb {
+	top: 16px;
+}
+#product_review_area dl dt {
+	padding: 10px;
+	font-size: 14px;
+	margin: 2px 0;
+}
+#product_review_area .review_btn {
+	padding: 2px 0 0;
+	text-align: center;
+}
+#product_review_area .review_btn a {
+	margin: 0 auto;
+	padding: 8px;
+	width: 40%;
+}
+@media only screen and (min-width: 768px) {
+	#product_review_area .review_btn a {
+		min-width: 100%;
+	}
+}
+</style>
+
+<script>
+eccube.classCategories = {{ Product.class_categories|json_encode|raw }};
+// 規格2に選択肢を割り当てる。
+	function fnSetClassCategories(form, classcat_id2_selected) {
+	var $form = $(form);
+	var product_id = $form.find('input[name=product_id]').val();
+	var $sele1 = $form.find('select[name=classcategory_id1]');
+	var $sele2 = $form.find('select[name=classcategory_id2]');
+	eccube.setClassCategories($form, product_id, $sele1, $sele2, classcat_id2_selected);
+}
+{% if form.classcategory_id2 is defined %}
+fnSetClassCategories(
+document.form1, {{ form.classcategory_id2.vars.value|json_encode|raw }}
+);
+{% endif %}
+</script>
+<script>
+$(function(){
+$('.carousel').slick({
+infinite: false,
+speed: 300,
+prevArrow:'<button type="button" class="slick-prev"><span class="angle-circle"><svg class="cb cb-angle-right"><use xlink:href="#cb-angle-right" /></svg></span></button>',
+nextArrow:'<button type="button" class="slick-next"><span class="angle-circle"><svg class="cb cb-angle-right"><use xlink:href="#cb-angle-right" /></svg></span></button>',
+slidesToShow: 4,
+slidesToScroll: 4,
+responsive: [
+{
+breakpoint: 768,
+settings: {
+slidesToShow: 3,
+slidesToScroll: 3
+}
+}
+]
+});
+
+$('.slides').slick({
+dots: true,
+arrows: false,
+speed: 300,
+customPaging: function(slider, i) {
+return '<button class="thumbnail">' + $(slider.$slides[i]).find('img').prop('outerHTML') + '</button>';
+}
+});
+
+$('#favorite').click(function() {
+$('#mode').val('add_favorite');
+});
+
+$('#add-cart').click(function() {
+$('#mode').val('add_cart');
+});
+
+// bfcache無効化
+$(window).bind('pageshow', function(event) {
+if (event.originalEvent.persisted) {
+location.reload(true);
+}
+});
+});
+</script>
+<!-- js追記 ここから -->
+<script src="/user_data/flickity/flickity.pkgd.min.js"></script>
+<script>
+(function($){
+$(window).on('load', function(){
+var num = $('.slick-dots').find('li').length;
+if( num > 3 ){
+$('.slick-dots').flickity({
+pageDots: false,
+cellAlign: 'left'
+});
+}
+});
+})(jQuery);
+</script>
+<!-- ここまで -->
+<!-- Google 構造化データ JSON-LD マークアップ -->
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org/",
+  "@type": "Product",
+  "name": "{{ Product.name }}",
+  "image": [{% if Product.ProductImage|length > 0 %}{% for ProductImage in Product.ProductImage %}{% if loop.index > 1 %},{% endif %}"{{url('homepage')}}{{ app.config.image_save_urlpath }}/{{ ProductImage|no_image_product }}"{% endfor %}{% else %}"{{url('homepage')}}{{ app.config.image_save_urlpath }}/{{ ''|no_image_product }}"{% endif %}],
+  "description": "{{ Product.free_area}}",
+  "sku": "{{ Product.code_min }}",
+  "category":[
+    {% for ProductCategory in Product.ProductCategories %}{% if loop.index > 1 %},{% endif %}"{% for Category in ProductCategory.Category.path %}{% if loop.index > 1 %} / {% endif %}{{ Category.name }}{% endfor %}"{% endfor %}
+  ],
+  "brand": {
+    "@type": "Thing",
+    "name": "Vings"
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "JPY",
+    "price": "{{ Product.getPrice02IncTaxMin }}",
+    "itemCondition": "http://schema.org/NewCondition",
+    "availability": "http://schema.org/InStock",
+    "seller": {
+      "@type": "Organization",
+      "name": "Vings, Inc."
+    }
+  }
+}
+</script>
+{% endblock %}
+
+{% block main %}
+{# todo ブロック化}
+<div id="topicpath" class="row">
+{% for ProductCategory in Product.ProductCategories %}
+<ol>
+<li><a href="{{ url('product_list') }}">全商品</a></li>
+{% for Category in ProductCategory.Category.path %}
+<li><a href="{{ url('product_list') }}?category_id={{ Category.id }}">{{ Category.name }}</a></li>
+{% endfor %}
+<li>{{ Product.name }}</li>
+</ol>
+{% endfor %}
+</div>
+#}
+<!-- ▼関連カテゴリ▼ -->
+<div id="relative_category_box" class="relative_cat">
+{% for ProductCategory in Product.ProductCategories %}
+<ol id="relative_category_box__relative_category--{{ ProductCategory.product_id }}_{{ loop.index }}">
+{% set CategoryLevel = 0 %}
+{% for Category in ProductCategory.Category.path %}
+  {% if ProductCategory.Category.level > 1 %}
+  {% if ProductCategory.Category.level == 3 %}
+  {% set CategoryLevel = 1 %}
+  <!-- ★ここに追加★ -->
+<li><a id="relative_category_box__relative_category--{{ ProductCategory.product_id }}_{{ loop.parent.loop.index }}_{{ Category.id }}" href="{{ url('product_list') }}?category_id={{ Category.id }}">{{ Category.name }}</a></li>
+  <!-- ★ここに追加★ -->
+  {% elseif ProductCategory.Category.level == 2 and CategoryLevel == 0 %}
+  <!-- ★ここに追加★ -->
+<li><a id="relative_category_box__relative_category--{{ ProductCategory.product_id }}_{{ loop.parent.loop.index }}_{{ Category.id }}" href="{{ url('product_list') }}?category_id={{ Category.id }}">{{ Category.name }}</a></li>
+  <!-- ★ここに追加★ -->
+  {% endif %}
+  {% endif %}
+{% endfor %}
+</ol>
+{% endfor %}
+</div>
+<!-- ▲関連カテゴリ▲ -->
+<!-- ▼item_detail▼ -->
+<div id="item_detail">
+<div id="detail_wrap" class="row">
+<!--★画像★-->
+<div id="item_photo_area" class="col-sm-6">
+<div id="detail_image_box__slides" class="slides">
+{% if Product.ProductImage|length > 0 %}
+{% for ProductImage in Product.ProductImage %}
+<div id="detail_image_box__item--{{ loop.index }}"><img src="{{ app.config.image_save_urlpath }}/{{ ProductImage|no_image_product }}"/></div>
+{% endfor %}
+{% else %}
+<div id="detail_image_box__item"><img src="{{ app.config.image_save_urlpath }}/{{ ''|no_image_product }}" alt="{{ app.config.image_save_urlpath }}/{{ ''|no_image_product }}" />
+</div>
+{% endif %}
+</div>
+</div>
+
+<section id="item_detail_area" class="col-sm-6">
+
+<!--★商品名★-->
+<!-- <h3 id="detail_description_box__name" class="item_name1">{{ Product.name }}</h3>-->
+<div id="detail_description_box__body" class="item_detail">
+
+{% if Product.ProductTag is not empty %}
+<!--▼商品タグ-->
+<div id="product_tag_box" class="product_tag">
+{% for ProductTag in Product.ProductTag %}
+<span id="product_tag_box__product_tag--{{ ProductTag.id }}" class="product_tag_list">{{ ProductTag.Tag }}</span>
+{% endfor %}
+</div>
+<!--▲商品タグ-->
+{% endif %}
+<h1 id="detail_description_box__name" class="item_name1">{{ Product.name }}</h1>
+
+<!--▼フリーエリア-->
+{% if Product.freearea %}
+<div id="sub_area" class="row">
+<div class="col-sm-11">
+<div id="detail_free_box__freearea" class="freearea"><h2>{{ include(template_from_string(Product.freearea)) }}</h2></div>
+</div>
+</div>
+{% endif %}
+<!--▲フリーエリア-->
+
+<!--★通常価格★-->
+{% if Product.hasProductClass -%}
+{% if Product.getPrice01Min is not null and Product.getPrice01IncTaxMin == Product.getPrice01IncTaxMax %}
+<p id="detail_description_box__class_normal_price" class="normal_price"> 通常価格：<span class="price01_default">{{ Product.getPrice01IncTaxMin|price }}</span> <span class="small">税込</span></p>
+{% elseif Product.getPrice01Min is not null and Product.getPrice01Max is not null %}
+<p id="detail_description_box__class_normal_range_price" class="normal_price"> 通常価格：<span class="price01_default">{{ Product.getPrice01IncTaxMin|price }} ～ {{ Product.getPrice01IncTaxMax|price }}</span> <span class="small">税込</span></p>
+{% endif %}
+{% else -%}
+{% if Product.getPrice01Max is not null %}
+<p id="detail_description_box__normal_price" class="normal_price"> 通常価格：<span class="price01_default">{{ Product.getPrice01IncTaxMin|price}}</span> <span class="small">税込</span></p>
+{% endif %}
+{% endif -%}
+
+<!--★販売価格★-->
+{% if Product.hasProductClass -%}
+{% if Product.getPrice02IncTaxMin == Product.getPrice02IncTaxMax %}
+<p id="detail_description_box__class_sale_price" class="sale_price text-primary"> <span class="price02_default">{{ Product.getPrice02IncTaxMin|price }}</span> <span class="small">税込</span></p>
+{% else %}
+<p id="detail_description_box__class_range_sale_price" class="sale_price text-primary"> <span class="price02_default">{{ Product.getPrice02IncTaxMin|price }} ～ {{  Product.getPrice02IncTaxMax|price }}</span> <span class="small">税込</span></p>
+{% endif %}
+{% else -%}
+<p id="detail_description_box__sale_price" class="sale_price text-primary"> <span class="price02_default">{{ Product.getPrice02IncTaxMin|price }}</span> <span class="small">税込</span></p>
+{% endif -%}
+<!--<span>税金</span><span id="h-price"></span>-->
+<script>
+
+</script>
+<!--▼送料-->
+<div class="gui">
+<p>東京都は 送料 1点<span id="gui"></span>円,　追加＋500円 </p>
+このストアで20,000円以上購入で<span style=" background: #ff7434;padding: 5px;color: #fff;">送料無料</span>
+</div>
+<!--▲送料-->
+<script>
+<!--
+$gui=950;
+document.getElementById("gui").innerHTML=$gui;
+//-->
+</script>
+
+<!--▼商品コード-->
+<p id="detail_description_box__item_range_code" class="item_code">商品コード： <span id="item_code_default">
+{{ Product.code_min }}
+{% if Product.code_min != Product.code_max %} ～ {{ Product.code_max }}{% endif %}
+</span> </p>
+<!--▲商品コード-->
+
+<form action="?" method="post" id="form1" name="form1">
+<!--▼買い物かご-->
+<div id="detail_cart_box" class="cart_area">
+{% if Product.stock_find %}
+{# 規格 #}
+{% if form.classcategory_id1 is defined %}
+<ul id="detail_cart_box__cart_class_category_id" class="classcategory_list">
+{# 規格1 #}
+<li> 
+<p>{{ class_name.class_name1.name }}</p>
+{{ form_label(form.classcategory_id1) }}
+{{ form_widget(form.classcategory_id1) }}
+{{ form_errors(form.classcategory_id1) }}
+</li>
+{# 規格2 #}
+{% if form.classcategory_id2 is defined %}
+<li> 
+{{ form_label(form.classcategory_id2) }}
+{{ form_widget(form.classcategory_id2) }}
+{{ form_errors(form.classcategory_id2) }}
+</li>
+{% endif %}
+</ul>
+{% endif %}
+
+
+{# 数量 #}
+<dl id="detail_cart_box__cart_quantity" class="quantity">
+<dt>数量</dt>
+<dd>
+{{ form_widget(form.quantity) }}
+{{ form_errors(form.quantity) }}
+<div class="pl-mi-btn">
+<label for="num-plus" class="pm-btn plus"></label>
+<label for="num-minus" class="pm-btn minus"></label>
+</div>
+<style>
+.pl-mi-btn {
+box-sizing: border-box;
+display: inline-block;
+padding: 2px;
+height: 30px;
+vertical-align: bottom;
+}
+.pl-mi-btn .pm-btn {
+background: #fcfcfc;
+border-radius: 50%;
+cursor: pointer;
+display: inline-block;
+font-weight: bold;
+height: 24px;
+margin: 0 5px;
+position: relative;
+text-align: center;
+vertical-align: middle;
+width: 24px;
+}
+.pl-mi-btn .pm-btn:before,
+.pl-mi-btn .pm-btn.plus:after {
+background: #666;
+border-radius: 2px;
+bottom: 0;
+content: '';
+display: block;
+height: 2px;
+left: 0;
+margin: auto;
+position: absolute;
+right: 0;
+top: 0;
+width: 16px;
+}
+.pl-mi-btn .pm-btn.plus:after {
+height: 16px;
+width: 2px;
+}
+</style>
+
+<script>
+<!--
+$('.pm-btn.plus').on('click', function(){
+var $inquantity = $('#quantity');
+var num = $inquantity.val();
+num++;
+$inquantity.val(num);
+$inquantity.text(num);
+});
+
+$('.pm-btn.minus').on('click', function(){
+var $inquantity = $('#quantity');
+var num = $inquantity.val();
+if(num > 1){
+num--;
+$inquantity.val(num);
+$inquantity.text(num);
+}
+});
+//-->
+</script>
+</dd>
+</dl>
+
+<div class="extra-form">
+{% for f in form.getIterator %}
+{% if f.vars.name matches '[^plg*]' %}
+{{ form_row(f) }}
+{% endif %}
+{% endfor %}
+</div>
+
+{# カートボタン #}
+<div id="detail_cart_box__button_area" class="btn_area">
+<ul id="detail_cart_box__insert_button" class="row">
+<li class="col-xs-12 col-sm-12 kato"><button type="submit" id="add-cart" class="btn btn-primary btn-block prevention-btn prevention-mask"> カートに入れる</button></li>
+</ul>
+{% if BaseInfo.option_favorite_product == 1 %}
+<ul id="detail_cart_box__favorite_button" class="row">
+{% if is_favorite == false %}
+<li class="col-xs-12 col-sm-12 kato"><button type="submit" id="favorite" class="btn btn-info btn-block prevention-btn prevention-mask">お気に入りに追加</button></li>
+{% else %}
+<li class="col-xs-12 col-sm-12 kato"><button type="submit" id="favorite" class="btn btn-info btn-block" disabled="disabled">お気に入りに追加済みです</button></li>
+{% endif %}
+</ul>
+{% endif %}
+</div>
+{% else %}
+{# 在庫がない場合は品切れボタンのみ表示 #}
+<div id="detail_cart_box__button_area" class="btn_area">
+<ul class="row">
+<li class="col-xs-12 col-sm-8"><button type="button" class="btn btn-default btn-block" disabled="disabled">ただいま品切れ中です</button></li>
+</ul>
+</div>
+{% endif %}
+</div>
+<!--▲買い物かご-->
+{{ form_rest(form) }}
+</form>
+<!-- ▼商品レビュー▼ -->
+<!--# product-review-plugin-tag #-->
+<!-- ▲商品レビュー▲ -->
+</div>
+<!-- /.item_detail -->
+
+</section>
+<!--詳細ここまで-->
+</div>
+{# フリーエリア #}
+<p id="detail_not_stock_box__description_detail" class="item_comment"><div  class="h-button" style="margin:5px 0;"><button>商品の詳細</button></div></p>
+<script>
+$(document).ready(function(){
+$("button").click(function(){
+$("#h-dt-image").slideToggle("slow");
+});
+});
+</script>
+<style>
+.h-button {
+border-bottom: 0.5px dotted #cac6c6;
+}
+.h-button button {
+background: #ff7434;
+color: #fff;
+padding: 2px 5px;
+}
+.h-image{
+text-align: center;
+margin: 10px;
+}
+</style>
+<div id="h-dt-image" class="col-sm-12">
+<div id="detail_image_box__slides1" class="slides1">
+{% if Product.ProductImage|length > 0 %}
+{% for ProductImage in Product.ProductImage %}
+<div class="h-image"><img src="{{ app.config.image_save_urlpath }}/{{ ProductImage|no_image_product }}" alt="{{ Product.name }}"/>
+</div>
+{% endfor %}
+{% else %}
+<div class="h-image"><img src="{{ app.config.image_save_urlpath }}/{{ ''|no_image_product }}"/>
+</div>
+{% endif %}
+</div>
+<p>{{ Product.description_detail|raw }}</p>
+</div>
+
+<!-- ▼関連商品▼ -->
+<!--# related-product-plugin-tag #-->
+<!-- ▲関連商品▲ -->
+
+</div>
+
+{% endblock %}

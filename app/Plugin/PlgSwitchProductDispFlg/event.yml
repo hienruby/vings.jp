@@ -1,0 +1,5 @@
+Admin/Product/index.twig:
+    - [onRenderProductInitialize, NORMAL]
+
+admin.product.index.initialize:
+    - [onRenderProductIndex, NORMAL]

@@ -1,0 +1,129 @@
+{#
+ This file is part of the PostCarrier
+
+ Copyright(c) 2016 IPLOGIC CO.,LTD. All Rights Reserved.
+ http://www.iplogic.co.jp/
+
+ For the full copyright and license information, please view the LICENSE
+ file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set menus = ['postcarrier', 'postcarrier_schedule'] %}
+
+{% block title %}ポストキャリア管理{% endblock %}
+{% block sub_title %}スケジュール配信予約一覧{% endblock %}
+
+{% block javascript %}
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.core.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.widget.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.mouse.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.sortable.min.js"></script>
+
+<script>
+function fnDelete(action) {
+    if (confirm('このスケジュールを削除しても宜しいですか？')) {
+        document.form1.action = action;
+        document.form1.submit();
+    }
+}
+function fnExec(action) {
+    if (confirm('このスケジュールを即時配信しても宜しいですか？')) {
+        document.form1.action = action;
+        document.form1.submit();
+    }
+}
+function changeAction(action) {
+    document.form1.action = action;
+    document.form1.submit();
+}
+</script>
+
+{% endblock %}
+
+{% block main %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                {% if pagination and pagination.totalItemCount > 0 %}
+                <div class="box-header">
+                    <a href="{{ url('admin_postcarrier_schedule') }}" class="btn btn-info btn-xs pull-right">一覧を更新する</a>
+                    <h3 class="box-title">総件数 <span class="normal"><strong>{{ pagination.totalItemCount }} 件</strong> </span></h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <form name="form1" id="form1" method="post" action="">
+                        {% include "pager.twig" with { 'pages' : pagination.paginationData, 'routes' : 'admin_postcarrier_schedule_page' } %}
+
+			<div class="row">
+                            <div class="col-md-12">
+				<ul class="sort-dd">
+                                    <li id="result_list_main__pagemax_menu" class="dropdown">
+					{% for pageMax in pageMaxis if pageMax.name == page_count %}
+                                        <a id="result_list_main__pagemax_menu_toggle" class="dropdown-toggle" data-toggle="dropdown">{{ pageMax.name|e }}件<svg class="cb cb-angle-down icon_down"> <use xlink:href="#cb-angle-down" /></svg></a>
+                                        <ul class="dropdown-menu">
+					    {% endfor %}
+					    {% for pageMax in pageMaxis if pageMax.name != page_count %}
+                                            <li><a href="{{ path('admin_postcarrier_schedule_page', {'page_no': 1, 'page_count': pageMax.name}) }}">{{ pageMax.name|e }}件</a></li>
+					    {% endfor %}
+                                        </ul>
+                                    </li>
+                                    {# var3.0.0では未対応
+                                    <li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown">CSVダウンロード<svg class="cb cb-angle-down icon_down"><use xlink:href="#cb-angle-down"></svg></a>
+					<ul class="dropdown-menu">
+                                            <li><a>ダウンロード</a></li>
+                                            <li><a>出力項目設定</a></li>
+					</ul>
+                                    </li>
+                                    #}
+				</ul>
+                            </div>
+			</div>
+
+                        <div class="table_list">
+                            <div class="table-responsive with-border">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th style="text-align: center">配信開始時刻</th>
+                                        <th style="text-align: center">件名<br />[メール形式][管理名称]</th>
+                                        <th style="text-align: center">プレビュー</th>
+					<th style="text-align: center">配信条件</th>
+					<th style="text-align: center">配信予定件数</th>
+                                        <th style="text-align: center">即時配信</th>
+                                        <th style="text-align: center">編集</th>
+                                        <th style="text-align: center">削除</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for Schedule in pagination %}
+                                        <tr>
+                                            <td style="text-align: center">{{ Schedule.startTime|date("Y/m/d H:i") }}</td>
+                                            <td>{{ Schedule.subject }}<br />[{% if Schedule.type == "html" %}HTML{% else %}テキスト{% endif %}]{% if Schedule.name %}[{{ Schedule.name }}]{% endif %}</td>
+                                            <td style="text-align: center"><a href="?" onclick="changeAction('{{ url('admin_postcarrier_history_preview', { id: Schedule.deliveryId, from: 'sch'}) }}'); document.form1.submit(); return false;">プレビュー</a></td>
+                                            <td style="text-align: center"><a href="?" onclick="changeAction('{{ url('admin_postcarrier_history_condition', { id: Schedule.deliveryId, from: 'sch'}) }}'); document.form1.submit(); return false;">配信条件</a></td>
+                                            <td style="text-align: right">{{ Schedule.customerCount }}</td>
+                                            <td style="text-align: center"><a href="?" onclick="fnExec('{{ url('admin_postcarrier_schedule_run', { id: Schedule.deliveryId }) }}'); return false;">即時配信</a></td>
+                                            <td style="text-align: center"><a href="?" onclick="changeAction('{{ url('admin_postcarrier_edit', { id: Schedule.deliveryId }) }}'); document.form1.submit(); return false;">編集</a></td>
+                                            <td style="text-align: center"><a href="?" onclick="fnDelete('{{ url('admin_postcarrier_schedule_delete', { id: Schedule.deliveryId }) }}'); return false;">削除</a></td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                {% else %}
+                    {# データがない場合 #}
+                    <div class="box-header with-arrow">
+                        <h3 class="box-title">該当するデータがありませんでした。</h3>
+                    </div><!-- /.box-header -->
+                {% endif %}
+            </div><!-- /.box -->
+
+        </div>
+    </div>
+
+{% endblock %}

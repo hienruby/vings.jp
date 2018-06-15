@@ -1,0 +1,20 @@
+Plugin\IntroduceDiscount\Entity\AffiliateSettings:
+    type: entity
+    table: plg_affiliate_settings
+    repositoryClass: Plugin\IntroduceDiscount\Repository\AffiliateSettingsRepository
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            column: id
+            generator:
+                strategy: AUTO
+    fields:
+        introduce_conversion_discount_rate:
+            type: integer
+            nullable: true
+        meet_conversion_discount_rate:
+            type: integer
+            nullable: true

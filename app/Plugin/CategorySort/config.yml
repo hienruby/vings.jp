@@ -1,0 +1,6 @@
+name: カテゴリー並び替えプラグイン(rank・レベル・階層)
+code: CategorySort
+version: 1.0.0
+#event: CategorySortEvent
+service:
+    - CategorySortServiceProvider

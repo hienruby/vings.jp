@@ -1,0 +1,11 @@
+eccube.event.render.shopping.before:
+    - [onRenderShoppingBefore, NORMAL]
+eccube.event.render.product_detail.before:
+    - [onRenderProductDetailBefore, NORMAL]
+eccube.event.controller.shopping_confirm.before:
+    - [onControllerShoppingConfirmBefore, NORMAL]
+eccube.event.render.mypage_history.before:
+    - [onRenderMyPageHistoryBefore, NORMAL]
+
+eccube.event.controller.product_detail.after:
+    - [onControllerProductDetailAfter, NORMAL]

@@ -1,0 +1,4 @@
+front.cart.index.initialize:
+    - [calcCartAnalytics, NORMAL]
+front.shopping.complete.initialize:
+    - [buyCartAnalytics, NORMAL]

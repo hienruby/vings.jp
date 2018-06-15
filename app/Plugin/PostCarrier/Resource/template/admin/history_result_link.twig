@@ -1,0 +1,70 @@
+{#
+ This file is part of the PostCarrier
+
+ Copyright(c) 2016 IPLOGIC CO.,LTD. All Rights Reserved.
+ http://www.iplogic.co.jp/
+
+ For the full copyright and license information, please view the LICENSE
+ file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set menus = ['postcarrier', 'postcarrier_history'] %}
+
+{% block title %}ポストキャリア管理{% endblock %}
+{% block sub_title %}配信履歴{% endblock %}
+
+{% block javascript %}
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.core.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.widget.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.mouse.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.sortable.min.js"></script>
+{% endblock %}
+
+{% block main %}
+
+    <div class="box no-header">
+	<div class="box-body">
+	    <div class="table_list">
+		<div class="table-responsive with-border">
+		    <table class="table">
+			<colgroup width="50%">
+			<colgroup width="50%">
+			<tr>
+			    <td colspan="2" style="text-align: center"><span style="color:#1a87d5">■クリック数</span>　　<span style="color:#FF4500">■コンバージョン数</span>
+			    </td>
+			</tr>
+			{% for Marketing in arrMarketing %}
+			<tr style="border: 1px dotted gray;">
+			    <td style="border: 1px dotted gray; text-align: right;">
+				<div>{{ Marketing.name }}<span style="color:#1a87d5; font-size:10px;">&nbsp;&nbsp;{{ Marketing.nTotalClick|number_format }}</span></div>
+				<br/>
+				<div>{{ Marketing.url_short }}<span style="color:#FF4500; font-size:10px;">&nbsp;&nbsp;{{ Marketing.nTotalConversion|number_format }}</span></div>
+			    </td>
+			    <td width="440px" style="border: 1px dotted gray; text-align: left;">
+				<div style="background-color: #1a87d5; width: {{ Marketing.click_width }}%; font-size: 10px;">
+				    &nbsp;<span style="color:#1a87d5">　</span>
+				</div>
+				<br/>
+				<div style="background-color: #FF4500; width: {{ Marketing.conversion_width }}%; font-size: 10px;">
+				    &nbsp;<span style="color:#FF4500">　</span>
+				</div>
+			    </td>
+			</tr>
+			{% endfor %}
+		    </table>
+		</div>
+	    </div>
+	</div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 text-center btn_area">
+	    <a href="javascript:void(0)" class="btn btn-primary btn-sm" onclick="window.history.back(-1); return false;">戻る</a>
+            <a href="{{ url('admin_postcarrier_history_result', { id: id }) }}" class="btn btn-primary btn-sm">配信内容分析</a>
+            <a href="{{ url('admin_postcarrier_history_result_customer', { id: id }) }}" class="btn btn-primary btn-sm">顧客別配信分析</a>
+            <a href="{{ url('admin_postcarrier_history_result_link', { id: id }) }}" class="btn btn-primary btn-sm">リンク別配信分析</a>
+        </div>
+    </div>
+
+{% endblock %}

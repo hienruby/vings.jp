@@ -1,0 +1,156 @@
+{#
+* Plugin Name : SalesRanking
+*
+* Copyright (C) 2015 BraTech Co., Ltd. All Rights Reserved.
+* http://www.bratech.co.jp/
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+#}
+
+<!--売上ランキング-->
+{% if ItemList %}
+<style>
+.normal_price {
+    padding: 0px;
+    margin: 0px;
+}
+.front_page #contents .row > div {
+     padding-bottom: 3px;
+}
+#sales_ranking .heading03 {
+  background: url("/user_data/bak/ranking.png");
+color: #fff;
+margin-top:0px;
+    height: 35px;
+    line-height: 35px;
+    padding-left: 40px;
+font-size: 13px;
+border-radius: 5px 5px 0 0;
+    box-shadow: 1px 1px 1px 1px rgba(107, 29, 34, 0.83);
+text-align:left;
+}
+#sales_ranking .heading03 img {opacity: .7;}
+#sales_ranking .item_name span {
+  color: #fff;
+  padding: 0.2em 0.7em;
+  margin-right: 1em;
+}
+#checkeditem .heading {
+    padding: 0px;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 15px;
+    background-color: pink;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 1px 1px 1px 1px rgba(107, 29, 34, 0.83);
+}
+item_gallery h4 {
+    background: transparent;
+    float: left;
+    font-size: 100%;
+    text-align: left;
+    padding: 0;
+    margin: 0;
+    line-height: 39px;
+}
+.ec-ur img {
+    width: 70%;
+}
+.ec-ur{margin:0;
+padding:0;
+margin-bottom: 5px;
+}
+#sales_ranking .item_photo{
+padding:0;
+}
+#sales_ranking {
+    margin:0;
+   box-shadow: 0 0 5px rgba(0,0,0,.2);
+    border-radius: 0px;
+    border: solid 1px #dcdada;
+    border-top: none;
+background: url("/user_data/bak/bak4.png");
+}
+.rank{
+padding:0;
+margin:0;
+}
+#sales_ranking .item_name {
+ color: #8D553A;
+    margin: 0 0 8px;
+    text-align: center;
+    overflow: hidden;
+    width: 100%;
+    text-overflow: normal;
+    white-space: normal;
+    padding: 0 20px;
+    font-weight: bold;
+line-height: 20px;
+    margin: 0;
+}
+.ichi .rank:first-child li{
+background:url("/user_data/bak/1s.png");
+background-size: 40px 30px;
+    background-repeat: no-repeat;
+    height: 30px;
+    display: block;
+      background-position: top center;
+    margin-bottom: 3px;
+}
+.ichi .rank:nth-child(2) li{
+background:url("/user_data/bak/2s.png");
+background-size: 40px 30px;
+    background-repeat: no-repeat;
+    height: 30px;
+    display: block;
+      background-position:  top center;
+    margin-bottom: 3px;
+}
+.ichi .rank:nth-child(3) li{
+background:url("/user_data/bak/3s1.png");
+    background-size: 70px 50px;
+    background-repeat: no-repeat;
+    height: 40px;
+    display: block;
+      background-position: top center;
+    margin-bottom: 3px;
+}
+.ichi .rank:first-child li a, .ichi .rank:nth-child(2) li a, .ichi .rank:nth-child(3) li a{
+display:none;
+}
+</style>
+
+<div id="sales_ranking" class="item_gallery">
+    <h3 class="heading03"> 売上ランキング</h3>
+    <div class="row ichi">
+      {% for Item in ItemList if Item.belongsToCategory(10) %}
+	  {% if loop.index0 < 3 %}
+        <div class="col-sm-12 col-xs-4 rank">
+            <div class="pickup_item1">
+           <li> <a>{{loop.index}}位</a></li>
+                <a href="{{ url('product_detail', {'id': Item.id}) }}">
+                    <div class="item_photo ec-ur"><img src="{{ app.config.image_save_urlpath }}/{{ Item.main_list_image|no_image_product }}" alt="{{Item.name}}"></div>
+                    <dl>
+                      <dt class="item_name"><h4>{{Item.name}}</h4></dt>
+                      <dd class="item_price">
+                      {% if Item.hasProductClass -%}
+                          {% if Item.getPrice02Min == Item.getPrice02Max %}
+                          <p class="normal_price"><span class="price01_default">{{ Item.getPrice02IncTaxMin|price }}</span></p>
+                          {% elseif Item.getPrice02Min is not null and Item.getPrice02Max is not null %}
+                          <p class="normal_price"><span class="price01_default"> {{ Item.getPrice02IncTaxMin|price }}</span> ～ <span class="price01_default"> {{ Item.getPrice02IncTaxMax|price }}</span></p>
+                          {% endif %}
+                      {% else -%}
+                          {% if Item.getPrice02Max is not null %}
+                          <p class="normal_price"><span class="price01_default">{{ Item.getPrice02IncTaxMin|price }}</span></p>
+                          {% endif %}
+                      {% endif -%}
+                    </dl>
+                </a>
+            </div>
+          </div>
+		  {% endif %}
+      {% endfor %}
+    </div>
+</div>
+{% endif %}

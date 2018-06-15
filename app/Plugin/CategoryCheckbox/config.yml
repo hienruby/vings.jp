@@ -1,0 +1,6 @@
+name: チェックボックスでカテゴリー複数指定が簡単になるプラグイン
+code: CategoryCheckbox
+version: 1.0.0
+service:
+    - CategoryCheckboxServiceProvider
+event: Event

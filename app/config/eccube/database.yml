@@ -1,0 +1,9 @@
+database:
+    driver: 'pdo_mysql'
+    host: 'mysql56s-17.kagoya.net'
+    dbname: 'kir021669_vings'
+    port: ''
+    user: 'kir021669'
+    password : 'rurupopo888'
+    charset: utf8
+    defaultTableOptions: { collate: utf8_general_ci }

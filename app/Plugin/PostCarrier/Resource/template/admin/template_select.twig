@@ -1,0 +1,657 @@
+{#
+ This file is part of the PostCarrier
+
+ Copyright(c) 2016 IPLOGIC CO.,LTD. All Rights Reserved.
+ http://www.iplogic.co.jp/
+
+ For the full copyright and license information, please view the LICENSE
+ file that was distributed with this source code.
+#}
+
+{#
+[メルマガ管理]-[配信内容設定]-[テンプレート選択]画面
+#}
+
+{% extends 'default_frame.twig' %}
+
+{% set menus = ['postcarrier', 'postcarrier'] %}
+
+{% block title %}ポストキャリア管理{% endblock %}
+{% block sub_title %}配信内容管理{% endblock %}
+
+{% form_theme form 'Form/bootstrap_3_horizontal_layout.html.twig' %}
+{% form_theme searchProductModalForm 'Form/bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{{ app.config.admin_urlpath }}/assets/css/bootstrap-datetimepicker.min.css">
+{% endblock stylesheet %}
+
+{% block javascript %}
+<script src="{{ app.config.admin_urlpath }}/assets/js/vendor/moment.min.js"></script>
+<script src="{{ app.config.admin_urlpath }}/assets/js/vendor/moment-ja.js"></script>
+<script src="{{ app.config.admin_urlpath }}/assets/js/vendor/bootstrap-datetimepicker.min.js"></script>
+<script src="{{ app.request.getBasePath }}{{ app.config.plugin_html_urlpath }}/postcarrier/assets/js/postcarrier.js"></script>
+<script src="{{ app.request.getBasePath }}{{ app.config.plugin_html_urlpath }}/postcarrier/assets/js/ckeditor/ckeditor.js"></script>
+    <script>
+
+    // 受注明細行の行数カウンタ.
+    // 受注登録・編集画面上でグローバルな変数.
+    // search_product.twig/order_detail_prototype.twigで利用しています.
+    order_details_count = '{{ form.OrderDetails|length }}';
+    stop_order_details_count = '{{ form.StopOrderDetails|length }}';
+
+
+var setModeAndSubmit = function(mode, keyname, keyid, confirm) {
+    if (confirm) {
+        if(!window.confirm(confirm)){
+            return;
+        }
+    }
+
+    document.form1.modal.value = mode;
+    if(keyname !== undefined && keyname !== "" && keyid !== undefined && keyid !== "") {
+        document.form1[keyname].value = keyid;
+    }
+    document.form1.submit();
+};
+
+var postcarrier_adminUrlPath = "{{ app.request.getBasePath }}{{ app.config.plugin_html_urlpath }}/postcarrier/assets/";
+var postcarrier_preview_url = "{{ url('admin_postcarrier_preview') }}";
+
+    $('input[name=postcarrier\\[mail_method\\]],input[name=postcarrier\\[sendFor\\]]').on('click', function() {
+        selectMailMethod();
+    });
+
+    $('#postcarrier_insert_to_subject').on('click', function() {
+        insertToSubject2();
+    });
+    $('#postcarrier_insert_to_body').on('click', function() {
+        insertListValue2();
+    });
+    $('#postcarrier_insert_to_subbody').on('click', function() {
+        insertListValueSubBody2();
+    });
+
+
+        $(function(){
+            $("#postcarrier_template").on("change", function(){
+                var id = $(this).val()
+                if (id) {
+                    action= '{{ url('admin_postcarrier_select') }}/' + id;
+                } else {
+                    action= '{{ url('admin_postcarrier_select') }}';
+                }
+                document.form1.action = action;
+                document.form1.submit();
+            });
+
+	        $('input[id=postcarrier_schedule_date]').datetimepicker({
+                    locale: 'ja',
+		    format: 'YYYY-MM-DD HH:mm',
+		    useCurrent: false,
+		    showTodayButton: true
+		});
+
+
+
+
+    // 商品検索ダイアログ表示
+    $('#searchProductModal').on('show.bs.modal', function (event) {
+	// buttonから配信条件か除外条件かを判定し、モーダルのJSに判定情報を渡す。
+        var button = $(event.relatedTarget);
+        var postcarrierTarget = button.data('postcarrierTarget');
+	target = postcarrierTarget ? 'exclude' : 'delivery';
+        var modal = $(this); // 商品検索モーダル
+        modal.find('#searchProductModalButton').attr('data-postcarrier-target', target);
+    });
+
+    $('#stepNoCondition').click(function() {
+        //alert('#stepNoCondition');
+        postcarrier_confirm_event_condition('no_start_condition');
+        return false;
+    });
+
+    $('#stepOrderTimes').click(function() {
+        //alert('#stepOrderTimes');
+        postcarrier_confirm_event_condition('start_count_condition');
+        return false;
+    });
+
+    $('#stopStepNoCondition').click(function() {
+        //alert('#stepOrderTimes');
+        postcarrier_confirm_event_condition('no_stop_condition');
+        return false;
+    });
+
+    // 商品検索 開始条件
+    $('#searchProductModalButton').on('click', function() {
+        var tbody = $('#searchProductModalList tbody');
+        tbody.children().remove();
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'html',
+            data: {
+                'id' : $('#admin_search_product_id').val(),
+                'category_id' : $('#admin_search_product_category_id').val()
+            },
+            url: '{{ url('admin_order_search_product', { postcarrier:'product_search' }) }}',
+            success: function(data) {
+                // モーダルに結果を書き出し.
+                $('#searchProductModalList').html(data);
+            },
+            error: function() {
+                alert('search product failed.');
+            }
+        });
+    });
+
+        });
+
+        function changeAction(action) {
+            document.form1.action = action;
+            document.form1.submit();
+        }
+
+        function selectTrigger() {
+	    $('#postcarrier_schedule_date').parents('.form-group').hide();
+	    $('#postcarrier_event').parents('.form-group').hide();
+	    $('#postcarrier_periodic_day').parents('.form-group').hide();
+
+	    var trigger_type = $('#postcarrier_trigger').val();
+            switch (trigger_type) {
+	    case 'schedule':
+   	        $('#postcarrier_schedule_date').parents('.form-group').show();
+	    break;
+	    case 'event':
+   	        $('#postcarrier_event').parents('.form-group').show();
+	    break;
+	    case 'periodic':
+	        $('#postcarrier_periodic_day').parents('.form-group').show();
+	    break;
+	    }
+        }
+
+        $(function () {
+	    selectTrigger();
+            selectMailMethod(true);
+        });
+
+
+    $(".delete-item").on("click", function(){
+	var target = $(this).attr('data-postcarrier-target');
+
+        $(this).parents(".item_box").remove();
+	if (target == 'exclude') {
+            stop_order_details_count--;
+            setModeAndSubmit('delete_stop_product');
+	} else {
+            order_details_count--;
+            setModeAndSubmit('delete_start_product');
+	}
+    });
+
+
+function postcarrier_confirm_event_condition(mode) {
+  {% if 0 < form.OrderDetails.vars.value|length %}
+    var msg_start = "現在の配信条件を削除します。"+(mode == 'start_count_condition' ? "購入回数による条件を" : "無条件に")+"設定しますか?"
+  {% else %}
+    var msg_start = "";
+  {% endif %};
+
+  {% if 0 < form.StopOrderDetails.vars.value|length %}
+    var msg_stop = "現在の除外条件を削除します。無条件に設定しますか?"
+  {% else %}
+    var msg_stop = "";
+  {% endif %};
+
+  var msg = mode == 'no_stop_condition' ? msg_stop : msg_start;
+  if (msg != "" && !window.confirm(msg)) {
+    return;
+  }
+
+  setModeAndSubmit(mode);
+}
+    </script>
+{% endblock javascript%}
+
+{% block main %}
+
+    <div class="row" id="aside_wrap">
+        <form name="form1" role="form" class="form-horizontal" id="form1" method="post" action="">
+            <input type="hidden" name="modal" value="">
+            {{ form_widget(form._token) }}
+
+            <div class="col-md-12">
+
+		<div id="customer_info_box"  class="box accordion">
+                    <div id="customer_info_box__toggle" class="box-header toggle active">
+			<h3 class="box-title">管理情報  ※管理用情報であり配信には使用されません<svg class="cb cb-angle-down icon_down"> <use xlink:href="#cb-angle-down" /></svg></h3>
+                    </div><!-- /.box-header -->
+                    <div id="customer_info_box__body" class="box-body accpanel" style="display: block;">
+			<div id="customer_info_list" class="order_list form-horizontal">
+                            <div class="form-group">
+				{{ form_label(form.adm_name) }}
+				<div class="col-sm-9 col-lg-10">
+                                    {{ form_widget(form.adm_name) }}
+                                    {{ form_errors(form.adm_name) }}
+				</div>
+                            </div>
+                            <div class="form-group">
+				{{ form_label(form.adm_note) }}
+				<div class="col-sm-9 col-lg-10">
+                                    {{ form_widget(form.adm_note) }}
+                                    {{ form_errors(form.adm_note) }}
+				</div>
+                            </div>
+			</div>
+                    </div><!-- /.box-body -->
+		</div><!-- /.box -->
+
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">メール配信方法</h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="form-group">
+                            <div class="col-md-2 col-lg-3" class="form-inline">
+				{{ form_widget(form.trigger, { 'attr': { 'onchange' : 'selectTrigger()' }} ) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+			    <label class="col-sm-2 control-label">配信日時</label>
+                            <div class="col-md-12 col-lg-2" class="form-inline">
+				{{ form_widget(form.schedule_date, { 'attr': {'class': 'input_cal', placeholder : '予約配信日時', style: 'width: 160px'}}) }}
+                            </div>
+			    <div class="col-sm-9">
+		               {{ form_errors(form.schedule_date) }}
+		            </div>
+                        </div>
+
+                        <div class="form-group">
+			    <label class="col-sm-2 control-label">配信日時</label>
+			    <div class="row">
+				<div class="col-sm-9 col-lg-4 form-inline">
+				    {{ form_widget(form.event, { 'attr': { 'onchange' : 'setModeAndSubmit("select_event")' }}) }}
+				    {{ form_widget(form.eventDay, { 'attr': { 'size' : 3 } }) }}&nbsp日
+				    {{ form_widget(form.eventDaySelect) }}
+				</div>
+				<div>
+				    {{ form_widget(form.stepmail_time) }}
+				</div>
+			    </div>
+			    <div class="col-sm-9">
+  			       {{ form_errors(form.eventDay) }}
+  			       {{ form_errors(form.stepmail_time) }}
+		            </div>
+                        </div>
+
+                        <div class="form-group">
+			    <label class="col-sm-2 control-label">配信日時</label>
+			    <div class="row">
+				<div class="col-sm-9 col-lg-2 form-inline">
+				    毎月&nbsp;{{ form_widget(form.periodic_day) }}&nbsp;日
+				</div>
+				<div class="">
+				    {{ form_widget(form.periodic_time) }}
+				</div>
+			    </div>
+			    <div class="col-sm-9">
+		               {{ form_errors(form.periodic_time) }}
+		            </div>
+                        </div>
+{#
+                        <div class="form-group">
+			    <label class="col-sm-2 control-label"></label>
+			    <div class="row">
+				{% if form.stepmail_time.vars.errors|length %}
+				<div class="col-sm-9" >
+				    {{ form_errors(form.schedule_date) }}
+  				    {{ form_errors(form.eventDay) }}
+  				    {{ form_errors(form.stepmail_time) }}
+				    {{ form_errors(form.periodic_time) }}
+				</div>
+				{% endif %}
+				</div>
+			    </div>
+                        </div>
+#}
+                    </div><!-- /.box-body -->
+
+                    {% if form.event.vars.value == 'paymentDate' or form.event.vars.value == 'orderDate' or form.event.vars.value == 'latestOrderDate' or form.event.vars.value == 'commitDate' or form.event.vars.value == 'latestCommitDate' %}
+                    <div id="product_info_box__body" class="box-body">
+			<div id="product_info_list" class="order_list">
+                            <div>
+				■配信条件 （設定した条件に該当する受注を対象としてメールが配信されます） 
+                            </div>
+                            <div class="btn_area">
+				<ul id="product_info_list__search_menu">
+                                    <li><a class="btn btn-default" id="stepNoCondition">無条件とする</a></li>
+                                    {% if form.event.vars.value == 'commitDate' or form.event.vars.value == 'orderDate' %}
+                                    <li><a class="btn btn-default" id="stepOrderTimes">購入回数で指定する</a></li>
+                                    {% endif %}
+                                    <li><a class="btn btn-default" data-toggle="modal" data-target="#searchProductModal">購入商品を条件として追加する</a></li>
+				</ul>
+                            </div>
+                            <div class="tableish"
+				 id="order_detail_list"
+				 data-prototype="
+						 {% filter escape %}
+						 {{ include('PostCarrier/Resource/template/admin/order_detail_prototype.twig', { 'orderDetailForm': form.OrderDetails.vars.prototype }) }}
+						 {% endfilter %}">
+                                {% if 1 < form.OrderDetails.vars.value|length %}
+			        <div id="product_info_list__conjunction" class="item_box">
+				    {{ form_widget(form.event_buy_product_id_conjunction) }}
+				</div>
+				{% endif %}
+				{% for orderDetailForm in form.OrderDetails %}
+				<div id="product_info_list__item--{{ loop.index }}" class="item_box">
+				    {{ form_widget(orderDetailForm.Product) }}
+				    {{ form_widget(orderDetailForm.ProductClass) }}
+
+				    <div id="product_info_list__item_detail--{{ loop.index }}" class="item_detail">
+					<div id="product_info_list__detail_name--{{ loop.index }}" class="item_name_area">
+					    <strong id="product_info_list__product_name--{{ loop.index }}" class="item_name">{{ orderDetailForm.vars.value.product_name }}</strong><br>
+					    <span id="product_info_list__product_code--{{ loop.index }}" class="item_id small">{{ orderDetailForm.vars.value.product_code }}</span>
+					</div>
+                                        {% if form.event.vars.value == 'commitDate' or form.event.vars.value == 'orderDate' %}
+					<div class="row">
+					    <div class="col-md-3 form-group form-inline">
+						<span id="product_info_list__quantity--{{ loop.index }}" class="item_quantity">
+                                                    購入回数：{{ form_widget(orderDetailForm.quantity) }}&nbsp;回目
+						    {{ form_errors(orderDetailForm.quantity) }}
+						</span>
+					    </div>
+					</div>
+                                        {% endif %}
+				    </div>
+				    <div id="product_info_list__button_multiple_shipping_delete--{{ loop.index }}" class="icon_edit">
+					<button class="btn btn-default btn-sm delete-item">削除</button>
+				    </div>
+				</div><!-- /.item_box -->
+				{% endfor %}
+                            </div>
+			    {% if 0 < form.event_buy_product_count_only.vars.value %}
+			    <div class="tableish">
+                                <div class="item_box">
+                                    <div class="item_detail">
+                                        <div id="product_info_list__detail_name--0}" class="item_name_area">
+                                            <strong id="product_info_list__product_name--0" class="item_name">商品の指定なし</strong><br>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3 form-group form-inline">
+                                                <span class="item_quantity">
+                                                    購入回数：{{ form_widget(form.event_buy_product_count_only) }}&nbsp;回目
+                                                    {{ form_errors(form.event_buy_product_count_only) }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+			    </div>
+			    {% elseif not form.OrderDetails.vars.value %}
+			    <div>
+                                <div class="item_box">
+                                    <div class="item_detail">
+                                        <div class="row">
+                                            <div class="col-md-12 form-group form-inline">
+                                                <span class="item_quantity">
+                                                    <font color="blue">無条件。購入商品に関係なく配信されます。</font>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                 </div>
+			    </div>
+			    {% endif %}
+			</div>
+                    </div> {# ■配信条件 #}
+
+                    <div id="stop_product_info_box__body" class="box-body accpanel" style="display: block;">
+			<div id="stop_product_info_list" class="order_list">
+                            <div>
+				■除外条件 （いずれかの条件に一致(OR)した受注の場合、メールは配信されません）
+                            </div>
+                            <div class="btn_area">
+				<ul id="stop_product_info_list__search_menu">
+                                    <li><a class="btn btn-default" id="stopStepNoCondition">無条件とする</a></li>
+                                    <li><a class="btn btn-default" data-toggle="modal" data-target="#searchProductModal" data-postcarrier-target="stop">購入商品を条件として追加する</a></li>
+				</ul>
+                            </div>
+			    {% if not form.StopOrderDetails.vars.value %}
+			    <div>
+                                <div class="item_box">
+                                    <div class="item_detail">
+                                        <div class="row">
+                                            <div class="col-md-12 form-group form-inline">
+                                                <span class="item_quantity">
+                                                    <font color="blue">無条件。購入商品による除外はありません。</font>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+			    </div>
+			    {% endif %}
+                            <div class="tableish"
+				 id="stop_order_detail_list"
+				 data-prototype="
+						 {% filter escape %}
+						 {{ include('PostCarrier/Resource/template/admin/stop_order_detail_prototype.twig', { 'stopOrderDetailForm': form.StopOrderDetails.vars.prototype }) }}
+						 {% endfilter %}">
+				{% for stopOrderDetailForm in form.StopOrderDetails %}
+                                <div id="stop_product_info_list__item--{{ loop.index }}" class="item_box">
+                                    {{ form_widget(stopOrderDetailForm.Product) }}
+                                    {{ form_widget(stopOrderDetailForm.ProductClass) }}
+
+                                    <div id="stop_product_info_list__item_detail--{{ loop.index }}" class="item_detail">
+                                        <div id="stop_product_info_list__detail_name--{{ loop.index }}" class="item_name_area">
+                                            <strong id="stop_product_info_list__product_name--{{ loop.index }}" class="item_name">{{ stopOrderDetailForm.vars.value.product_name }}</strong><br>
+                                            <span id="stop_product_info_list__product_code--{{ loop.index }}" class="item_id small">{{ stopOrderDetailForm.vars.value.product_code }}</span>
+                                        </div>
+                                    </div>
+                                    <div id="stop_product_info_list__button_multiple_shipping_delete--{{ loop.index }}" class="icon_edit">
+                                        <button class="btn btn-default btn-sm delete-item" data-postcarrier-target="exclude">削除</button>
+                                    </div>
+                                </div><!-- /.item_box -->
+				{% endfor %}
+                            </div>
+			</div>
+                    </div> {# ■除外条件 #}
+                </div><!-- /.box -->
+                {% endif %}
+
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">メールテンプレート選択</h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+			<div class="form-group">
+                            <div class="col-md-2 col-lg-8" class="form-inline">
+				{{ form_widget(form.template) }}
+				{{ form_errors(form.template) }}
+                            </div>
+			</div>
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+
+                <div class="box form-horizontal">
+                    <div class="box-header">
+                        <h3 class="box-title">テンプレート編集</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+
+                        <div class="form-group">
+                            {{ form_label(form.mail_method) }}
+                            <div class="col-sm-9 col-lg-10">
+                                {{ form_widget(form.mail_method) }}
+                                {{ form_errors(form.mail_method) }}
+                            </div>
+                        </div>
+			{#
+                        <div class="form-group">
+                            {{ form_label(form.sendFor) }}
+                            <div class="col-sm-9 col-lg-10">
+                                {{ form_widget(form.sendFor) }}
+                                {{ form_errors(form.sendFor) }}
+                            </div>
+                        </div>
+			#}
+                        <div class="form-group">
+                            {{ form_label(form.fromAddr) }}
+                            <div class="col-sm-9 col-lg-10">
+                                {{ form_widget(form.fromAddr) }}
+                                {{ form_errors(form.fromAddr) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.fromDisp) }}
+                            <div class="col-sm-9 col-lg-10">
+                                {{ form_widget(form.fromDisp) }}
+                                {{ form_errors(form.fromDisp) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.replytoAddr) }}
+                            <div class="col-sm-9 col-lg-10">
+                                {{ form_widget(form.replytoAddr) }}
+                                {{ form_errors(form.replytoAddr) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.replytoDisp) }}
+                            <div class="col-sm-9 col-lg-10">
+                                {{ form_widget(form.replytoDisp) }}
+                                {{ form_errors(form.replytoDisp) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.subject) }}
+                            <div class="col-sm-9 col-lg-10">
+                                {{ form_widget(form.subject) }}
+                                {{ form_errors(form.subject) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.subject_item) }}
+                            <div class="col-sm-9 col-lg-3">
+                                {{ form_widget(form.subject_item) }}
+                                {{ form_errors(form.subject_item) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-9 col-lg-8">
+			        <button id="postcarrier_insert_to_subject" class="btn btn-default btn-sm" type="button">件名に差し込む</button>
+			        <button id="postcarrier_insert_to_body" class="btn btn-default btn-sm" type="button">本文に差し込む</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.body) }}
+                            <div class="col-sm-9 col-lg-8">
+                                {{ form_widget(form.body) }}
+                                {{ form_errors(form.body) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.sub_body_item) }}
+                            <div class="col-sm-9 col-lg-4">
+                                {{ form_widget(form.sub_body_item) }}
+                                {{ form_errors(form.sub_body_item) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-9 col-lg-8">
+			        <button id="postcarrier_insert_to_subbody" class="btn btn-default btn-sm" type="button">代替本文に差し込む</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.sub_body) }}
+                            <div class="col-sm-9 col-lg-8">
+                                <p>HTML本文が表示できない機種の場合に表示する代替テキスト本文</p>
+                                {% if not form.vars.value.re_edit and form.vars.value.mail_type_web == 1 %}
+                                <p>テキストメール希望の会員宛には、この代替本文をテキストメールとして送信する</p>
+                                <p>{{ form_widget(form.text_mail_flg) }}
+                                <br /><font color="red">&nbsp;&nbsp;&nbsp;&nbsp;※「送信する」を選択するとテキスト本文の入力は必須</font></p>
+                                {% endif %}
+                                {{ form_widget(form.sub_body) }}
+                                {{ form_errors(form.sub_body) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="">
+{#
+            <div class="box no-header">
+                <div class="box-header">
+                    <h3 class="box-title">テスト配信</h3>
+                </div>
+#}
+                <div class="box-body">
+                    <div class="form-group">
+			{{ form_label(form.testAddress) }}
+                        <div class="col-sm-9 col-lg-10 form-inline">
+                            {{ form_widget(form.testAddress) }}
+			    <button class="btn btn-primary btn-sm" type="submit" onclick="setModeAndSubmit('test_delivery', '', '', 'テスト配信を実行しますか?'); return false;">テスト配信する</button>
+                            {{ form_errors(form.testAddress) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 text-center btn_area">
+
+                    <button class="btn btn-primary btn-lg" onclick="changeAction('{{ url('admin_postcarrier', {'mode':'back'}) }}'); return false;">検索画面に戻る</button>
+                    <button class="btn btn-primary btn-lg" onclick="postcarrier_preview(); return false;">プレビュー</button>
+                    <button class="btn btn-primary btn-lg" onclick="changeAction('{{ url('admin_postcarrier_confirm') }}/' + document.form1.postcarrier_template.value); return false;">確認ページへ <svg class="cb cb-angle-right"><use xlink:href="#cb-angle-right"></svg></button>
+                </div>
+            </div>
+
+            <div style="display: none">
+                {{ form_rest(form) }}
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block modal %}
+
+{# 商品検索モーダル #}
+<div class="modal fade" id="searchProductModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div id="search_product_modal_box" class="modal-content">
+            <div id="search_product_modal_box__header" class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="modal-close" aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">商品検索</h4>
+            </div>
+            <div id="search_product_modal_box__body" class="modal-body">
+                <div id="search_product_modal_box__id" class="form-group">
+                    {{ form_widget(searchProductModalForm.id, { attr : { placeholder : '商品名・ID・コード' } } ) }}
+                </div>
+                <div id="search_product_modal_box__category_id" class="form-group">
+                    {{ form_widget(searchProductModalForm.category_id) }}
+                </div>
+                <div class="extra-form form-group">
+                    {% for f in searchProductModalForm.getIterator %}
+                        {% if f.vars.name matches '[^plg*]' %}
+                            {{ form_label(f) }}
+                            {{ form_widget(f) }}
+                            {{ form_errors(f) }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div id="search_product_modal_box__button_search" class="form-group">
+                    <button type="button" id="searchProductModalButton" class="btn btn-primary" data-postcarrier-target="">検索</button>
+                </div>
+                <div class="form-group" id="searchProductModalList">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

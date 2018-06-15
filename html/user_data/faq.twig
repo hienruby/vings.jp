@@ -1,0 +1,93 @@
+{% extends 'default_frame.twig' %}
+
+{% block main %}
+<style>
+.product_lf{
+display:none;
+}
+
+.page-heading {
+padding-bottom:0;
+margin-bottom: 0;
+}
+.faq-name{
+float: left;
+display: block;
+}
+.faq-name li::before{
+content: "› ";
+color: red;
+}
+.faq-name li{
+    display: block;
+    line-height: 20px;
+}
+ a{
+    color: #563924;
+}
+a:hover{
+    color: red;
+    text-decoration: underline;
+}
+.faq-name span{
+    font-weight: bold;
+    line-height: 20px;
+    background-image: linear-gradient(to bottom, #f5cdb4 , #f9ece3);
+    display: block;
+    padding-left: 8px;
+}
+.faq-name{
+    padding:5px;
+}
+#faq-noidung{
+    margin-top: 5px;
+}
+
+</style>
+    <div id="contents" class="main_only">
+        <div id="privacy_wrap" class="container-fluid1 inner no-padding">    <div id="main1">
+                <h1 class="page-heading">よくあるご質問</h1>
+                <div id="" class="container-fluid">
+                        <div id="faq-noidung" class="col-md-12 ">
+                            <div class="faq-name col-md-6"><span>注文について</span>
+                                <li><a href="http://vings.jp/user_data/faq1">ご注文の受付方法</a></li>
+                                <li><a href="http://vings.jp/user_data/faq2">注文メールと連絡メールが届かない場合は？</a></li>
+                                <li><a href="http://vings.jp/user_data/faq3">送料について</a></li>
+                                <li><a href="http://vings.jp/user_data/faq4">ご注文対応、メールの送受信</a></li>
+								<li><a href="http://vings.jp/user_data/faq5">キャンセルについて</a></li>
+                            </div>
+                            <div class="faq-name col-md-6"><span>配達・納期</span>
+                                <li><a href="http://vings.jp/user_data/faq6">納期はどのぐらいでしょうか？</a></li>
+                                <li><a href="http://vings.jp/user_data/faq7">〇〇日までに商品を受け取りたいのですが。</a></li>
+<li><a href="http://vings.jp/user_data/faq8">局留めは可能ですか？</a></li>
+<li><a href="http://vings.jp/user_data/faq9">「品名」はどの様に明記されますか？</a></li>
+                            </div>
+                            <div class="faq-name col-md-6"><span>サイズ</span>
+                                <li><a href="http://vings.jp/user_data/faq10">サイズ指定の料金は？</a></li>
+                                <li><a href="http://vings.jp/user_data/faq11">サイズ指定はどのくらいで出来ますか？</a></li>
+                                <li><a href="http://vings.jp/user_data/faq12">商品の生地やデザインの変更は出来ますか？</a></li>
+                                <li><a href="http://vings.jp/user_data/faq13">既成商品のサイズ直しは出来ますか？</a></li>
+<li><a href="http://vings.jp/user_data/faq14">サイズに迷ってます。オススメサイズ教えて頂けますか？</a></li>
+                            </div>
+                            <div class="faq-name col-md-6"><span>お支払いについて</span>
+								<li><a href="http://vings.jp/user_data/faq15">お支払い方法</a></li>
+								<li><a href=""></a>クレッジトカードでのお支払方法</li>
+								<li><a href="http://vings.jp/user_data/faq16">注文の支払方法の変更はできますか？</a></li>
+							</div>
+                            <div class="faq-name col-md-6"><span>返品・交換</span>
+								<li><a href="http://vings.jp/user_data/faq17">返品・交換について</a></li>
+								<li><a href="http://vings.jp/user_data/faq18">届いた商品が破損・欠品しています</a></li>
+								<li><a href="http://vings.jp/user_data/faq19">注文と同じサイズの衣装が届いたんですが、サイズが合わないので、返品交換できますか？</a></li>
+								<li><a href="http://vings.jp/user_data/faq20">サイズは注文内容と異なる商品が届いた</a></li>
+							</div>
+                            <div class="faq-name col-md-6"><span>その他</span>
+								<li><a href=""></a>ショップで注文しましたが、注文確認メールが届きません</li>
+								<li><a href=""></a>急に衣装が必要になりました。早めに届けてくれませんか？</li>
+							</div>
+                        </div><!-- /.col -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

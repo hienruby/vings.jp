@@ -1,0 +1,111 @@
+{#
+ This file is part of the PostCarrier
+
+ Copyright(c) 2016 IPLOGIC CO.,LTD. All Rights Reserved.
+ http://www.iplogic.co.jp/
+
+ For the full copyright and license information, please view the LICENSE
+ file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set menus = ['postcarrier', 'postcarrier_history'] %}
+
+{% block title %}ポストキャリア管理{% endblock %}
+{% block sub_title %}配信履歴{% endblock %}
+
+{% block javascript %}
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.core.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.widget.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.mouse.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.sortable.min.js"></script>
+{% endblock %}
+
+{% block main %}
+
+    <div class="box no-header">
+	<div class="box-body">
+	    <div class="table-responsive with-border">
+		<table class="table">
+		    <tr>
+			<td style="text-align: center">
+			    <img src="//www.postcarrier.jp/chart?chs=350x150&chts=000000,15&chtt=クリック&cht=bvs&chco=FFC6A5,389ced&chbh=r,.6&chm=N,FF0000,-1,,12|N,000000,0,,12,,c|N,000000,1,,12,,c&chdl=女性|男性&chxt=x,y&chxl=0:|10代|20代|30代|40代|50代|60代|その他|1:|0|{{ arrMarketing.nTotalClick }}&chds=0,{{ arrMarketing.scals }}&chd=t:{{ arrMarketing.click[0][0] }},{{ arrMarketing.click[0][1] }},{{ arrMarketing.click[0][2] }},{{ arrMarketing.click[0][3] }},{{ arrMarketing.click[0][4] }},{{ arrMarketing.click[0][5] }},{{ arrMarketing.click[0][6] }}|{{ arrMarketing.click[1][0] }},{{ arrMarketing.click[1][1] }},{{ arrMarketing.click[1][2] }},{{ arrMarketing.click[1][3] }},{{ arrMarketing.click[1][4] }},{{ arrMarketing.click[1][5] }},{{ arrMarketing.click[1][6] }}">
+			</td>
+			<td style="text-align: center">
+			    <img src="//www.postcarrier.jp/chart?chs=350x150&chts=000000,15&chtt=コンバージョン&cht=bvs&chco=FFC6A5,389ced&chbh=r,.6&chm=N,FF0000,-1,,12|N,000000,0,,12,,c|N,000000,1,,12,,c&chdl=女性|男性&chxt=x,y&chxl=0:|10代|20代|30代|40代|50代|60代|その他|1:|0|{{ arrMarketing.nTotalConversion }}&chds=0,{{ arrMarketing.scals }}&chd=t:{{ arrMarketing.conversion[0][0] }},{{ arrMarketing.conversion[0][1] }},{{ arrMarketing.conversion[0][2] }},{{ arrMarketing.conversion[0][3] }},{{ arrMarketing.conversion[0][4] }},{{ arrMarketing.conversion[0][5] }},{{ arrMarketing.conversion[0][6] }}|{{ arrMarketing.conversion[1][0] }},{{ arrMarketing.conversion[1][1] }},{{ arrMarketing.conversion[1][2] }},{{ arrMarketing.conversion[1][3] }},{{ arrMarketing.conversion[1][4] }},{{ arrMarketing.conversion[1][5] }},{{ arrMarketing.conversion[1][6] }}">
+			</td>
+		    </tr>
+		</table>
+	    </div>
+	</div>
+    </div>
+
+    <div class="box no-header">
+	<div class="box-body">
+	    <div class="table-responsive with-border">
+		<table class="table">
+		    <tr>
+			<th>&nbsp;</th>
+			<th>10代</th>
+			<th>20代</th>
+			<th>30代</th>
+			<th>40代</th>
+			<th>50代</th>
+			<th>60代</th>
+			<th>その他</th>
+		    </tr>
+		    <tr>
+			<th nowrap>クリック数(女性)</th>
+			<td width="60" style="text-align: right">{{ arrMarketing.click[0][0]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.click[0][1]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.click[0][2]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.click[0][3]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.click[0][4]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.click[0][5]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.click[0][6]|number_format }}</td>
+		    </tr>
+		    <tr>
+			<th nowrap>クリック数(男性)</th>
+			<td width="60" style="text-align: right">{{ arrMarketing.click[1][0]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.click[1][1]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.click[1][2]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.click[1][3]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.click[1][4]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.click[1][5]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.click[1][6]|number_format }}</td>
+		    </tr>
+		    <tr>
+			<th nowrap>コンバージョン数(女性)</th>
+			<td width="60" style="text-align: right">{{ arrMarketing.conversion[0][0]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.conversion[0][1]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.conversion[0][2]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.conversion[0][3]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.conversion[0][4]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.conversion[0][5]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.conversion[0][6]|number_format }}</td>
+		    </tr>
+		    <tr>
+			<th nowrap>コンバージョン数(男性)</th>
+			<td width="60" style="text-align: right">{{ arrMarketing.conversion[1][0]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.conversion[1][1]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.conversion[1][2]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.conversion[1][3]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.conversion[1][4]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.conversion[1][5]|number_format }}</td>
+			<td width="60" style="text-align: right">{{ arrMarketing.conversion[1][6]|number_format }}</td>
+		    </tr>
+		</table>
+            </div>
+	</div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 text-center btn_area">
+	    <a href="javascript:void(0)" class="btn btn-primary btn-sm" onclick="window.history.back(-1); return false;">戻る</a>
+            <a href="{{ url('admin_postcarrier_history_result', { id: id }) }}" class="btn btn-primary btn-sm">配信内容分析</a>
+            <a href="{{ url('admin_postcarrier_history_result_customer', { id: id }) }}" class="btn btn-primary btn-sm">顧客別配信分析</a>
+            <a href="{{ url('admin_postcarrier_history_result_link', { id: id }) }}" class="btn btn-primary btn-sm">リンク別配信分析</a>
+        </div>
+    </div>
+
+{% endblock %}

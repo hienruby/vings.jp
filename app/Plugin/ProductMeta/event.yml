@@ -1,0 +1,13 @@
+# Admin/Product/ProductController
+admin.product.edit.complete:
+    - [onAdminProductEditComplete, NORMAL]
+admin.product.copy.complete:
+    - [onAdminProductCopyComplete, NORMAL]
+admin.product.delete.complete:
+    - [onAdminProductDeleteComplete, NORMAL]
+Admin/Product/product.twig:
+    - [onAdminProductProductRender, NORMAL]
+
+# ProductController
+front.product.detail.initialize:
+    - [onFrontProductDetailInitialize, NORMAL]

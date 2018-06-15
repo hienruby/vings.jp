@@ -1,0 +1,3 @@
+[2018-01-13 16:29:27,126659] admin.INFO  [NULL] [8c5207ed] [NULL] [LogListener:onKernelRequestEarly:47] - INIT   [GET, /admin/, 203.104.145.28, https://vings.jp:443/admin, facebookexternalhit/1.1;line-poker/1.0]
+[2018-01-13 16:29:27,316412] admin.INFO  [029c5753] [8c5207ed] [NULL] [LogListener:onKernelResponse:86] - LOGIC END ["admin_homepage"]  [GET, /admin/, 203.104.145.28, https://vings.jp:443/admin, facebookexternalhit/1.1;line-poker/1.0]
+[2018-01-13 16:29:27,316785] admin.INFO  [029c5753] [8c5207ed] [NULL] [LogListener:onKernelTerminate:95] - PROCESS END ["admin_homepage"]  [GET, /admin/, 203.104.145.28, https://vings.jp:443/admin, facebookexternalhit/1.1;line-poker/1.0]

@@ -1,0 +1,70 @@
+{% extends 'default_frame.twig' %}
+
+{% block main %}
+<style>
+.product_lf{
+display:none;
+}
+
+.page-heading {
+padding-bottom:0;
+margin-bottom: 0;
+}
+.faq-name{
+float: left;
+display: block;
+}
+.faq-name li::before{
+content: "? ";
+color: red;
+}
+.faq-name li{
+    display: block;
+    line-height: 20px;
+}
+ a{
+    color: #563924;
+}
+a:hover{
+    color: red;
+    text-decoration: underline;
+}
+.faq-name span{
+    font-weight: bold;
+    line-height: 20px;
+    background-image: linear-gradient(to bottom, #f5cdb4 , #f9ece3);
+    display: block;
+    padding-left: 8px;
+}
+.faq-name{
+    padding:5px;
+}
+#faq-noidung{
+    margin-top: 5px;
+}
+
+</style>
+    <div id="contents" class="main_only">
+        <div id="privacy_wrap" class="container-fluid1 inner no-padding">
+            <div id="main1">
+                <h1 class="page-heading">届いた商品が破損・欠品しています</h1>
+                <div id="" class="container-fluid">
+					<span class="mediumtext"><p><font face="Arial">お手数おかけいたしまして誠に申し訳ございません。<br>商品状態を確認いたしますので、下記内容をご確認の上、再度ご連絡をお願いいたします。<br><span class="mediumtext"><strong><font size="4">①</font>:</strong><br>
+破損の場合：ご指摘部分の写真と全体写真(タグ付)を携帯やデジタルカメラで撮影<br>
+欠品の場合：全セット内容と全体写真(タグ付)を携帯やデジタルカメラで撮影
+<br>
+<strong><font size="4">②</font>:</strong><br>
+撮影後、【写真を添付・ご注文様の氏名・ご注文番号】や破損・欠品の状況や開封した時の状態など詳しい内容説明をメールに明記し、<font color="#FF0000">info@vings.jp</font>までご連絡下さい。<br>
+※一度ご使用になられた商品・商品到着後７日以上経過した商品は初期不良からの対象外となりますので、ご了承くださいませ。<br>
+<br>
+<strong><font size="4">③</font>:</strong><br>
+お問い合わせいただいてから、2-3営業日以内に当店よりご連絡いたします。<br>
+３営業日以内に連絡がない場合、なんらかの理由でごメールが届いていない可能性がございます。<br>
+そのときは、お手数ですが再度ご送信等、ご連絡をお願い申し上げます。    </span>
+<br>
+					</font>    </span>
+				</div><!-- /.col -->
+            </div>
+        </div>
+    </div>
+{% endblock %}

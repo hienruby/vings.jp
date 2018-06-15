@@ -1,0 +1,3 @@
+#商品規格編集 テンプレート
+Admin/Product/class_name.twig:
+    - [onAdminProductClassNameTwig, NORMAL]

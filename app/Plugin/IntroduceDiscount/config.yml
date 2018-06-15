@@ -1,0 +1,8 @@
+name: IntroduceDiscount
+event: IntroduceDiscountEvent
+code: IntroduceDiscount
+version: 1.0.0
+service:
+    - IntroduceDiscountServiceProvider
+orm.path:
+    - /Resource/doctrine

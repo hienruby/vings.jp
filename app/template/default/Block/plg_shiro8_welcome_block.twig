@@ -1,0 +1,9 @@
+<!-- ▼ようこそプラグイン -->
+<div id="s8_wellcome" class="col-sm-5 pull-right" style="text-align:right;margin-top:-17px;">
+{% if app.user.name01 != '' %}
+    <p class="text-info" style=" display:block;margin:0;"><small>ようこそ {{ app.user.name01 }} {{ app.user.name02 }} 様</small></p>
+    {% else %}
+        <p class="text-success" style="display:block;margin:0 0 3px;"><small>ようこそ ゲスト 様</small></p>
+    {% endif %}
+</div>
+<!-- ▲ようこそプラグイン -->

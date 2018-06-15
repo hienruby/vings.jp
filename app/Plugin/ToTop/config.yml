@@ -1,0 +1,5 @@
+name: PAGE TOP プラグイン
+code: ToTop
+version: 1.0.0
+event: ToTopEvent
+

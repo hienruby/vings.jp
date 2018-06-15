@@ -1,0 +1,29 @@
+Plugin\IntroduceDiscount\Entity\AffiliateHistories:
+    type: entity
+    table: plg_affiliate_histories
+    repositoryClass: Plugin\IntroduceDiscount\Repository\AffiliateHistoriesRepository
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            column: id
+            generator:
+                strategy: AUTO
+    fields:
+        introduce_customer_id:
+            type: integer
+            nullable: false
+        meet_customer_id:
+            type: integer
+            nullable: true
+        order_id:
+            type: integer
+            nullable: false
+        create_date:
+            type: datetime
+            nullable: false
+        conversion_date:
+            type: datetime
+            nullable: true

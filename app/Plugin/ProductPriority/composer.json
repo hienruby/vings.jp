@@ -1,0 +1,17 @@
+{
+    "require": {
+        "ext-mbstring": "*",
+        "ext-pdo_sqlite": "*"
+    },
+    "scripts": {
+        "compile": [
+            "tar cvzf ../product-priority-plugin.tar.gz ./*",
+            "git clone https://github.com/EC-CUBE/ec-cube.git --depth 1",
+            "cd ec-cube && php eccube_install.php sqlite -V",
+            "cd ec-cube && php app/console plugin:develop install --path=../../product-priority-plugin.tar.gz",
+            "cd ec-cube && php app/console plugin:develop enable --code=ProductPriority",
+            "sed -i -e \"s|${PWD}|/app|\" ${PWD}/ec-cube/app/config/eccube/path.yml",
+            "sed -i -e \"s|${PWD}|/app|\" ${PWD}/ec-cube/app/config/eccube/database.yml"
+        ]
+    }
+}

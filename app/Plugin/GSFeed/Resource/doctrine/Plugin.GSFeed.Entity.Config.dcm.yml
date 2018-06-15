@@ -1,0 +1,18 @@
+Plugin\GSFeed\Entity\Config:
+    type: entity
+    table: plg_gsfeed_dtb_config
+    repositoryClass: Plugin\GSFeed\Repository\ConfigRepository
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+    fields:
+        brand:
+            type: text
+            nullable: true
+        gcategory:
+            type: text
+            nullable: true
+    lifecycleCallbacks: {  }

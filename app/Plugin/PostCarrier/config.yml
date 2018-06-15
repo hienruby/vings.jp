@@ -1,0 +1,8 @@
+name: ポストキャリア
+code: PostCarrier
+version: 1.1.4
+event: PostCarrierEvent
+service:
+    - PostCarrierServiceProvider
+orm.path:
+    - /Resource/doctrine

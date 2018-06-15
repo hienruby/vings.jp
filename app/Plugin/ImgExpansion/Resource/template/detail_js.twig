@@ -1,0 +1,35 @@
+<script>
+    var size = $(window).width();
+    $(window).resize(function() {
+        size = $(window).width();
+    });
+
+    $(window).bind('load', function() {
+        zoomer();
+    });
+
+    $(window).resize(function() {
+        zoomer();
+    });
+
+    function zoomer() {
+        setTimeout(function () {
+            $('.magnifier').remove();
+            $('.cursorshade').remove();
+            $('.statusdiv').remove();
+            $('.tracker').remove();
+
+            if (768 > size) {
+                return false;
+            }
+
+            $("[id^=detail_image_box__item] img").imagezoomsl({
+                zoomrange: [3, 10],
+                zoomstart: 3,
+                magnifiereffectanimate: 'fadeIn',
+                magnifierborder: '0'
+            });
+
+        }, 30);
+    }
+</script>

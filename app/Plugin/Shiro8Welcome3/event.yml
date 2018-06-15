@@ -1,0 +1,128 @@
+eccube.event.front.request:
+    - [onRequestFront, NORMAL]
+eccube.event.front.response:
+    - [onResponseFront, NORMAL]
+default_frame.twig:
+    - [onReplace, NORMAL]
+error.twig:
+    - [onReplace, NORMAL]
+index.twig:
+    - [onReplace, NORMAL]
+pagination.twig:
+    - [onReplace, NORMAL]
+Block/search_product.twig:
+    - [onReplace, NORMAL]
+Block/news.twig:
+    - [onReplace, NORMAL]
+Block/new_product.twig:
+    - [onReplace, NORMAL]
+Block/logo.twig:
+    - [onReplace, NORMAL]
+Block/login.twig:
+    - [onReplace, NORMAL]
+Block/garally.twig:
+    - [onReplace, NORMAL]
+Block/free.twig:
+    - [onReplace, NORMAL]
+Block/footer.twig:
+    - [onReplace, NORMAL]
+Block/category.twig:
+    - [onReplace, NORMAL]
+Block/cart.twig:
+    - [onReplace, NORMAL]
+Block/index.twig:
+    - [onReplace, NORMAL]
+Cart/index.twig:
+    - [onReplace, NORMAL]
+Contact/complete.twig:
+    - [onReplace, NORMAL]
+Contact/confirm.twig:
+    - [onReplace, NORMAL]
+Contact/index.twig:
+    - [onReplace, NORMAL]
+Entry/activate.twig:
+    - [onReplace, NORMAL]
+Entry/complete.twig:
+    - [onReplace, NORMAL]
+Entry/confirm.twig:
+    - [onReplace, NORMAL]
+Entry/index.twig:
+    - [onReplace, NORMAL]
+Forgot/complete.twig:
+    - [onReplace, NORMAL]
+Forgot/index.twig:
+    - [onReplace, NORMAL]
+Forgot/reset.twig:
+    - [onReplace, NORMAL]
+Form/form_layout.twig:
+    - [onReplace, NORMAL]
+Help/about.twig:
+    - [onReplace, NORMAL]
+Help/agreement.twig:
+    - [onReplace, NORMAL]
+Help/guide.twig:
+    - [onReplace, NORMAL]
+Help/privacy.twig:
+    - [onReplace, NORMAL]
+Help/tradelaw.twig:
+    - [onReplace, NORMAL]
+Mail/contact_mail.twig:
+    - [onReplace, NORMAL]
+Mail/customer_withdraw_mail.twig:
+    - [onReplace, NORMAL]
+Mail/entry_complete.twig:
+    - [onReplace, NORMAL]
+Mail/entry_confirm.twig:
+    - [onReplace, NORMAL]
+Mail/forgot_mail.twig:
+    - [onReplace, NORMAL]
+Mail/order.twig:
+    - [onReplace, NORMAL]
+Mail/reset_complete_mail.twig:
+    - [onReplace, NORMAL]
+Mypage/change.twig:
+    - [onReplace, NORMAL]
+Mypage/change_complete.twig:
+    - [onReplace, NORMAL]
+Mypage/delivery.twig:
+    - [onReplace, NORMAL]
+Mypage/delivery_edit.twig:
+    - [onReplace, NORMAL]
+Mypage/favorite.twig:
+    - [onReplace, NORMAL]
+Mypage/history.twig:
+    - [onReplace, NORMAL]
+Mypage/index.twig:
+    - [onReplace, NORMAL]
+Mypage/login.twig:
+    - [onReplace, NORMAL]
+Mypage/navi.twig:
+    - [onReplace, NORMAL]
+Mypage/withdraw.twig:
+    - [onReplace, NORMAL]
+Mypage/withdraw_complete.twig:
+    - [onReplace, NORMAL]
+Mypage/withdraw_confirm.twig:
+    - [onReplace, NORMAL]
+Product/detail.twig:
+    - [onReplace, NORMAL]
+Product/list.twig:
+    - [onReplace, NORMAL]
+Shopping/complete.twig:
+    - [onReplace, NORMAL]
+Shopping/index.twig:
+    - [onReplace, NORMAL]
+Shopping/login.twig:
+    - [onReplace, NORMAL]
+Shopping/nonmember.twig:
+    - [onReplace, NORMAL]
+Shopping/shipping.twig:
+    - [onReplace, NORMAL]
+Shopping/shipping_edit.twig:
+    - [onReplace, NORMAL]
+Shopping/shipping_multiple.twig:
+    - [onReplace, NORMAL]
+Shopping/shipping_multiple_edit.twig:
+    - [onReplace, NORMAL]
+Shopping/shopping_error.twig:
+    - [onReplace, NORMAL]

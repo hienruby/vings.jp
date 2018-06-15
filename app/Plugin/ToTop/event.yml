@@ -1,0 +1,4 @@
+
+eccube.event.front.response:
+    - [onRenderToTop, NORMAL]
+

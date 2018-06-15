@@ -1,0 +1,130 @@
+{% extends 'default_frame.twig' %}
+
+{% set menus = ['cart_analytics', 'cart_analytics_list'] %}
+
+{% block title %}CartAnalytics{% endblock %}
+{% block sub_title %}カート離脱率{% endblock %}
+
+{% form_theme searchForm 'Form/bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ app.config.admin_urlpath }}/assets/css/bootstrap-datetimepicker.min.css">
+{% endblock stylesheet %}
+
+{% block javascript %}
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/moment.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/moment-ja.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/bootstrap-datetimepicker.min.js"></script>
+    <script>
+        $(function() {
+            var inputDate = document.createElement('input');
+            inputDate.setAttribute('type', 'date');
+            if (inputDate.type !== 'date') {
+                $('input[id$=_date_from]').datetimepicker({
+                    locale: 'ja',
+                    format: 'YYYY-MM-DD',
+                    useCurrent: false,
+                    showTodayButton: true
+                });
+
+                $('input[id$=_date_to]').datetimepicker({
+                    locale: 'ja',
+                    format: 'YYYY-MM-DD',
+                    useCurrent: false,
+                    showTodayButton: true
+                });
+            }
+        });
+        function fnConfirm(action) {
+            document.search_form.action = action;
+            document.search_form.submit();
+        }
+    </script>
+{% endblock javascript %}
+
+{% block main %}
+    <!--検索条件設定テーブルここから-->
+    <div id="search_wrap" class="search-box">
+        <form name="search_form" id="search_form" method="post" action="{{ url('admin_cart_analytics_list') }}">
+            {{ form_widget(searchForm._token) }}
+            <div id="search_box" class="row">
+                <div class="col-md-12">
+                    <div class="form-group range">
+                        {{ form_widget(searchForm.add_date_from, {'attr': {'class': 'input_cal'}}) }} ～ {{ form_widget(searchForm.add_date_to, {'attr': {'class': 'input_cal'}}) }}
+                    </div>
+                </div>
+                <div id="search_box__footer" class="row btn_area">
+                    <div id="search_box__search_button" class="col-xs-8 col-xs-offset-2 col-sm-4 col-sm-offset-4 text-center">
+                        <button class="btn btn-primary btn-block btn-lg" onclick="eccube.fnFormModeSubmit('search_form', 'search', '', ''); return false;">
+                            集計する <svg class="cb cb-angle-right"><use xlink:href="#cb-angle-right"></svg>
+                        </button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+
+        </form>
+    </div>
+    <!--検索条件設定テーブルここまで-->
+    <div id="result_list" class="row">
+    <div class="col-md-12">
+    <div id="result_list_main" class="box">
+        {% if analyticsList|length > 0 %}
+            ※商品単位での集計は「レポートダウンロード」にてご利用ください。
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr><th class="date">日付</th><th class="count">離脱人数 / 全体人数</th><th class="persent">離脱率</th><th class="loss">機会損失</th></tr>
+                </thead>
+                <tbody>
+                    {% set totalNoBuyCount = 0 %}
+                    {% set totalBuyCount = 0 %}
+                    {% set totalPrice = 0 %}
+                    {% for date in dateList %}
+                        {% if analyticsList[date] %}
+                            {% set totalNoBuyCount = totalNoBuyCount + analyticsList[date][0].count|default(0) %}
+                            {% set totalBuyCount = totalBuyCount + analyticsList[date][1].count|default(0) %}
+                            {% set totalPrice = totalPrice + analyticsList[date][0].price|default(0) %}
+                            <tr>
+                                <td class="date">{{ date }}</td>
+                                <td class="count">{{ analyticsList[date][0].count|default(0) }} / {{ analyticsList[date][0].count|default(0) + analyticsList[date][1].count|default(0) }}</td>
+                                <td class="persent">{{ (analyticsList[date][0].count|default(0) / (analyticsList[date][0].count|default(0) + analyticsList[date][1].count|default(0)) * 100)|number_format(1) }}％</td>
+                                <td class="loss">{{ analyticsList[date][0].price|default(0)|price }}</td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td class="date">{{ date }}</td>
+                                <td class="count">-</td>
+                                <td class="persent">-</td>
+                                <td class="loss">-</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                        <tr class="total">
+                            <td class="date">期間合計</td>
+                            <td class="count">{{ totalNoBuyCount }} / {{ totalNoBuyCount + totalBuyCount }}</td>
+                            <td class="persent">{{ (totalNoBuyCount / (totalNoBuyCount + totalBuyCount) * 100)|number_format(1) }}％</td>
+                            <td class="loss">{{ totalPrice|price }}</td>
+                        </tr>
+                </tbody>
+            </table>
+            <img src="http://chart.apis.google.com/chart?chs=350x300&chco=ff6666,aaaaff&chd=t:{{ (totalNoBuyCount / (totalNoBuyCount + totalBuyCount) * 100)|number_format(0) }},{{ (totalBuyCount / (totalNoBuyCount + totalBuyCount) * 100)|number_format(0) }}&cht=p&chtt=離脱割合（期間合計）&chdl=離脱|購入">
+            {% set chdt1 = [] %}
+            {% set chdt2 = [] %}
+            {% for date in dateList %}
+                {% if analyticsList[date] %}
+                    {% set chdt1 = chdt1|merge([(analyticsList[date][0].count|default(0) / (analyticsList[date][0].count|default(0) + analyticsList[date][1].count|default(0)) * 100)|number_format(0)]) %}
+                    {% set chdt2 = chdt2|merge([(analyticsList[date][1].count|default(0) / (analyticsList[date][0].count|default(0) + analyticsList[date][1].count|default(0)) * 100)|number_format(0)]) %}
+                {% else %}
+                    {% set chdt1 = chdt1|merge([0]) %}
+                    {% set chdt2 = chdt2|merge([0]) %}
+                {% endif %}
+            {% endfor %}
+
+            <img src="http://chart.apis.google.com/chart?chs=400x300&chxt=x,y&chxl=0:{% for date in dateList %}|{{ date|slice(5,5) }}{% endfor %}|1:||50%|100%&chco=ff6666,aaaaff&chls=5,1,0|5,1,0&chd=t:{{ chdt1|join(',') }}|{{ chdt2|join(',') }}&cht=lc&chtt=離脱率推移&chdl=離脱|購入">
+
+        {% else %}
+            対象のデータは存在しません
+        {% endif %}
+    </div><!-- /.box -->
+    </div><!-- /.col -->
+    </div>
+{% endblock %}

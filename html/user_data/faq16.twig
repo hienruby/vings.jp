@@ -1,0 +1,64 @@
+{% extends 'default_frame.twig' %}
+
+{% block main %}
+<style>
+.product_lf{
+display:none;
+}
+
+.page-heading {
+padding-bottom:0;
+margin-bottom: 0;
+}
+.faq-name{
+float: left;
+display: block;
+}
+.faq-name li::before{
+content: "? ";
+color: red;
+}
+.faq-name li{
+    display: block;
+    line-height: 20px;
+}
+ a{
+    color: #563924;
+}
+a:hover{
+    color: red;
+    text-decoration: underline;
+}
+.faq-name span{
+    font-weight: bold;
+    line-height: 20px;
+    background-image: linear-gradient(to bottom, #f5cdb4 , #f9ece3);
+    display: block;
+    padding-left: 8px;
+}
+.faq-name{
+    padding:5px;
+}
+#faq-noidung{
+    margin-top: 5px;
+}
+
+</style>
+    <div id="contents" class="main_only">
+        <div id="privacy_wrap" class="container-fluid1 inner no-padding">
+            <div id="main1">
+                <h1 class="page-heading">注文の支払方法の変更はできますか？</h1>
+                <div id="" class="container-fluid">
+					<span class="mediumtext"><p><font face="Arial">『クレジットカード決済』から『銀行・ゆうちょ振込』への変更は可能です。<br> 
+振込先等当店より再度ご連絡いたしますので、ご確認後お振込をお願いいたします。<br> 
+お振込後は、当店までご連絡をお願いいたします。<br><br> 
+『銀行・ゆうちょ振込』から『クレジットカード決済』に変更することができませんので、
+クレジットカード決済をご希望の場合は、再度新規にてご注文をお願いいたします。<br>
+その際は、最初のご注文分を当店にてキャンセル手続きいたしますので、ご連絡くださいませ。
+<br>
+					</font>    </span>
+				</div><!-- /.col -->
+            </div>
+        </div>
+    </div>
+{% endblock %}

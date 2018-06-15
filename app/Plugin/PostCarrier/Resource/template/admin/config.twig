@@ -1,0 +1,153 @@
+{% extends 'default_frame.twig' %}
+
+{% set menus = ['store', 'plugin', 'plugin_list'] %}
+
+{% block title %}PostCarrier画面{% endblock %}
+{% block sub_title %}{% endblock %}
+
+{% form_theme form 'Form/bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block main %}
+    <form class="form-horizontal" method="post" action="{{ url('plugin_PostCarrier_config') }}">
+        {{ form_widget(form._token) }}
+        {{ form_widget(form.sample_insert_flg) }}
+        <div class="row" id="aside_wrap">
+            <div  class="col-md-9">
+                <div class="box" style="background-color: #fffacd;">
+                    <div class="box-body">
+                        <div>
+                          本メルマガ配信サービス「PostCarrier for EC-CUBE」の御利用には、別途有料のご契約が必要となります。</br>
+                          <span>
+			    <a href="https://www.postcarrier.jp/entry/index.html" target="_blank">
+                              <button type="button" class="btn btn-default btn-sm" style="margin-bottom:10px;">お申し込みはこちら</button>
+                            </a>
+			  </span>
+                        </div>
+                        <div>
+			  サービスの詳細については、本サービスの<a href="https://www.postcarrier.jp/" target="_blank">ホームページ</a>、
+			  またはこちらの<a href="https://www.postcarrier.jp/refresh_post.html" target="_blank">資料</a>をご覧ください。</br>
+                          デモサイト・テスト導入・ご質問等ございましたら、下記からお問い合わせください。</br>
+                          <span>
+			    <a href="https://www.postcarrier.jp/contact/index.html" target="_blank">
+                              <button type="button" class="btn btn-default btn-sm" style="margin-bottom:10px;">お問い合わせはこちら</button>
+                            </a>
+			  </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">ポストキャリア設定</h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">プラグインバージョン</label>
+                            <div class="col-sm-8">{{ pluginVersion }}</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">有効アドレス件数</label>
+                            <div class="col-sm-8">
+                                {% if sub_data.address_count is null %}
+                                    未計算
+                                {% else %}
+                                   {{ sub_data.address_count|number_format }}件
+                                   {% if sub_data.address_count_update_date %}(最終更新日:{{ sub_data.address_count_update_date|date('Y/m/d H:i') }}){% endif %}
+                                {% endif %}
+   			        &nbsp;&nbsp;<button type="submit" name="action" value="address_count" class="btn btn-primary btn-xs">更新</button>
+                            </div>
+                        </div>
+                        <div class="form-group {% if form.server_url.vars.errors|length %} has-error {% endif %}">
+                            <label class="col-sm-4 control-label">接続先サーバーURL<span class="text-danger">*</span></label>
+                            <div class="col-sm-8">
+                                {{ form_widget(form.server_url) }}
+                                {{ form_errors(form.server_url) }}
+                            </div>
+                        </div>
+                        <div class="form-group {% if form.shop_id.vars.errors|length %} has-error {% endif %}">
+                            <label class="col-sm-4 control-label">ショップID<span class="text-danger">*</span></label>
+                            <div class="col-sm-8">
+                                {{ form_widget(form.shop_id) }}
+                                {{ form_errors(form.shop_id) }}
+                            </div>
+                        </div>
+                        <div class="form-group {% if form.shop_pass.vars.errors|length %} has-error {% endif %}">
+                            <label class="col-sm-4 control-label">ショップパスワード<span class="text-danger">*</span></label>
+                            <div class="col-sm-8">
+                                {{ form_widget(form.shop_pass) }}
+                                {{ form_errors(form.shop_pass) }}
+                            </div>
+                        </div>
+                        <div class="form-group {% if form.ssl_check.vars.errors|length %} has-error {% endif %}">
+                            <label class="col-sm-4 control-label">SSL証明書<span class="text-danger">*</span></label>
+                            <div class="col-sm-8">
+                                {{ form_widget(form.ssl_check) }}
+                                {{ form_errors(form.ssl_check) }}
+                                <p>正当なSSL証明書を導入されている場合、チェックしてください。</p>
+                            </div>
+                        </div>
+{#
+                        <div class="form-group {% if form.php_binary_path.vars.errors|length %} has-error {% endif %}">
+                            <label class="col-sm-4 control-label">PHP実行ファイルの絶対パス<span class="text-danger">*</span></label>
+                            <div class="col-sm-8">
+                                {{ form_widget(form.php_binary_path) }}
+                                {{ form_errors(form.php_binary_path) }}
+                            </div>
+                        </div>
+#}
+                        <div class="form-group {% if form.email04.vars.errors|length %} has-error {% endif %}">
+                            <label class="col-sm-4 control-label">エラー通知アドレス<span class="text-danger">*</span></label>
+                            <div class="col-sm-8">
+                                {{ form_widget(form.email04) }}
+                                {{ form_errors(form.email04) }}
+                            </div>
+                        </div>
+{#
+                        <div class="form-group {% if form.sample_insert_flg.vars.errors|length %} has-error {% endif %}">
+                            <label class="col-sm-4 control-label">サンプルメールテンプレートのインストール<span class="text-danger">*</span></label>
+                            <div class="col-sm-8">
+                                {{ form_widget(form.sample_insert_flg) }}
+                                {{ form_errors(form.sample_insert_flg) }}
+                            </div>
+                        </div>
+#}
+                        <div class="form-group {% if form.disable_check.vars.errors|length %} has-error {% endif %}">
+                            <label class="col-sm-4 control-label">動作モード<span class="text-danger">*</span></label>
+                            <div class="col-sm-8">
+                                {{ form_widget(form.disable_check) }}
+                                {{ form_errors(form.disable_check) }}
+				<p><font color="red">本番環境では、本番モードを選択してください。</font></p>
+				<p>ベーシック認証・IPアドレス制限などインターネットに公開されていないサイトは、テストモードを選択してください。</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">サーバーAPI URL</label>
+                            <div class="col-sm-8">
+                                {% if sub_data.apiUrl is null %}未登録{% else %}{{ sub_data.apiUrl }}{% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">サーバー側クリックURL</label>
+                            <div class="col-sm-8">
+                                {% if sub_data.clickUrl is null %}未登録{% else %}{{ sub_data.clickUrl }}{% endif %}
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+            </div><!-- /.col -->
+            <div class="col-md-3" id="aside_column">
+                <div id="common_box" class="col_inner">
+                    <div id="common_button_box" class="box no-header">
+                        <div id="common_button_box__body" class="box-body">
+                            <div id="common_button_box__edit_button" class="row text-center">
+                                <div class="col-sm-6 col-sm-offset-3 col-md-12 col-md-offset-0">
+                                    <button class="btn btn-primary btn-block btn-lg" type="submit">設定</button>
+                                </div>
+                            </div>
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+                </div>
+            </div><!-- /.col -->
+        </div>
+    </form>
+{% endblock main %}

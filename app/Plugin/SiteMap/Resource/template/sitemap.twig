@@ -1,0 +1,21 @@
+{#
+* Plugin Name : SiteMap
+*
+* Copyright (C) BraTech Co., Ltd. All Rights Reserved.
+* http://www.bratech.co.jp/
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+#}
+<?xml version="1.0" encoding="UTF-8"?>
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{% for Item in Items %}
+    <url>
+        <loc>{{ Item.loc }}</loc>
+        <lastmod>{{ Item.lastmod }}</lastmod>
+        <changefreq>{{ changefreq }}</changefreq>
+        <priority>{{ priority }}</priority>
+    </url>
+{% endfor %}
+</urlset>

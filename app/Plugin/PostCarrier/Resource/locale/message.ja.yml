@@ -1,0 +1,12 @@
+admin.postcarrier.template.save.complete: メールテンプレート情報を保存しました。
+admin.postcarrier.template.save.failure: メールテンプレート情報の保存に失敗しました。
+admin.postcarrier.template.data.notfound: メールテンプレートが存在しません。
+admin.postcarrier.template.data.illegalaccess: 正常なアクセスではありません。
+
+admin.postcarrier.send.complete: メルマガ配信が完了しました。
+admin.postcarrier.send.regist.failure: 配信履歴の登録に失敗しました。
+
+admin.postcarrier.history.datanotfound: 配信履歴が存在しません。
+admin.postcarrier.history.delete.sucesss: 配信履歴を削除しました。
+
+admin.postcarrier.request.failed: 配信サーバーとの通信に失敗ました。

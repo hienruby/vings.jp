@@ -1,0 +1,162 @@
+{#
+* Plugin Name : CheckedItem
+*
+* Copyright (C) 2015 BraTech Co., Ltd. All Rights Reserved.
+* http://www.bratech.co.jp/
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+#}
+<style>
+.pickup_item {
+margin-top:5px;
+padding:5px;
+}
+.container-fluid1{
+    padding-left: 16px;
+    padding-right: 16px;
+}
+.inner {
+    max-width: 980px;
+}
+.container-fluid1 {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+.item_gallery {
+    clear: both;
+}
+.pickup_item{
+   box-shadow: 0px 0px 6px 3px #bbbcbb;
+-moz-box-shadow:0px 0px 6px 3px #5bd7c8;
+ -webkit-box-shadow: 1px 1px 6px 2px rgb(195, 183, 183);
+
+/* border-radius */
+border-radius:6px;
+-moz-border-radius:6px;
+-webkit-border-radius:6px;
+/* border */
+}
+.item_photo {
+    padding:10px 10px  0px 10px;
+}
+.item_name {
+    color: #525263;
+    margin: 0 0 8px;
+    text-align: center;
+    overflow: hidden;
+    width: 100%;
+padding: 0 10px;
+}
+.item_price {
+    color: #525263;
+    font-weight: bold;
+    text-align: center;
+    color: #e60d0d;
+}
+.item_gallery .heading {
+  background-color: pink;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 15px;
+}
+.row1{
+padding-bottom:10px;
+}
+</style>
+<!--最近チェックした商品-->
+{% if checkedItems %}
+<style>
+#checkeditem .heading01 {
+  background: transparent;
+  float:left;
+  font-size: 100%;
+  text-align: left;
+  padding: 0;
+  margin: 0;
+  line-height: 39px;
+  color: white;
+}
+#checkeditem .heading02 {
+  background: transparent;
+  font-size: 60%;
+  text-align: right;
+  padding: 0;
+  margin: 0;
+}
+.heading02 a{
+border-radius:0 10px 0 0;
+}
+#checkeditem .heading {
+    padding: 0px;; 
+    height: 40px;
+    line-height: 40px;
+  padding-left:15px;
+ background: url(/user_data/bak/bak8.png);
+border-radius: 10px 10px 0 0;
+    box-shadow: 1px 1px 1px 1px rgba(107, 29, 34, 0.83);
+        margin: 0 -14px;
+  }
+    .heading02 a {
+    border-radius: 0 10px 0 0;
+    background: transparent;
+    border: none;
+}
+   .h-name{
+           color: #8D553A;
+           line-height: 18px;
+text-align: center;
+    }
+
+</style>
+<div class="container-fluid inner">
+<div id="checkeditem" class="item_gallery">
+  {% if delete == 0 %}
+    <div class="heading">
+      <p class="heading01"> <img src="/user_data/icon/check1.png">  最近チェックした商品</p>
+
+      <p class="heading02">
+        <a href="{{ url('block_checkeditem_delete')}}" class="btn btn-info btn-sm">履歴を削除</a>
+      </p>
+    </div>
+  {% else %}
+    <h4 class="heading">最近チェックした商品</h4>
+  {% endif %}
+    <div class="row" style="clear: both;">
+      {% for checkedItem in checkedItems|slice(0,displayNum)  %}
+        <div class="col-sm-2 col-xs-6">
+            <div class="pickup_item">
+                <a href="{{ url('product_detail', {'id': checkedItem.id}) }}">
+                    <div class="item_photo"><img src="{{ app.config.image_save_urlpath }}/{{ checkedItem.main_list_image|no_image_product }}" alt="{{checkedItem.name}}"></div>
+                    <dl>
+                      <!--<dt class="item_name">{{checkedItem.name}}</dt>-->
+                        <h4 class="h-name">
+                                    <script>
+                                    <!--
+                                    var x = "{{checkedItem.name}}";
+                                    document.write(x.slice(0,18)); //-->
+                                    </script>
+                                    </h4>
+                      <dd class="item_price">
+                      {% if checkedItem.hasProductClass -%}
+                          {% if checkedItem.getPrice02Min == checkedItem.getPrice02Max %}
+                          <p class="normal_price"><span class="price01_default">{{ checkedItem.getPrice02IncTaxMin|price }}</span></p>
+                          {% elseif checkedItem.getPrice02Min is not null and checkedItem.getPrice02Max is not null %}
+                          <p class="normal_price"><span class="price01_default">{{ checkedItem.getPrice02IncTaxMin|price }}</span> ～ <span class="price01_default">{{ checkedItem.getPrice02IncTaxMax|price }}</span></p>
+                          {% endif %}
+                      {% else -%}
+                          {% if checkedItem.getPrice02Max is not null %}
+                          <p class="normal_price"><span class="price01_default">{{ checkedItem.getPrice02IncTaxMin|price }}</span></p>
+                          {% endif %}
+                      {% endif -%}
+                    </dl>
+                </a>
+            </div>
+</div>
+      {% endfor %}
+    </div>
+    </div>
+</div>
+{% endif %}

@@ -1,0 +1,320 @@
+{% extends 'default_frame.twig' %}
+
+{% block javascript %}
+<script type="text/javascript" src="js/jquery-1.5.min.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="js/jquery.hoverIntent.minified.js"></script>
+<script type="text/javascript" src="js/jquery.dcjqaccordion.2.7.min.js"></script>
+<script type="text/javascript">
+$(function($){
+	$('#accordion-1').dcAccordion({
+		eventType: 'click',
+		autoClose: true,
+		disableLink: true,
+		speed: 'slow',
+		showCount: true,
+		autoExpand: true,
+		classExpand	 : 'dcjq-current-parent'
+	});
+
+});
+</script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script>
+function acdMenu() {
+	//デフォルトでアコーディオンの中身を非表示
+	$(".acMenu dd").not(':first').hide();
+	//$(".acMenu dd").css("display", "none");
+	$(".acMenu2 ul").css("display", "none");
+	//第2階層のアコーディオン　
+	$(".acMenu dt").click(function() {
+		$(".acMenu dt").not(this).next().slideUp("fast");
+		$(this).next().slideToggle("fast");
+	});
+	//第3階層のアコーディオン
+	$(".acMenu2 p").click(function() {
+		//$(this).toggleClass("openAcd").next().slideToggle("fast");
+		$(".acMenu2 p").not(this).next().slideUp("fast");
+		$(this).next().slideToggle("fast");
+	});
+}
+$(function() {
+	acdMenu();
+});
+</script>
+<style>
+.question {
+    padding:5px 10px;
+    font-weight:bold;
+    font-family:Arial;
+    font-size:14px;
+	color:#563924;
+    border:1px solid #f5cdb4;
+	background-image:linear-gradient(to bottom, #f5cdb4 , #f9ece3);
+    cursor: pointer;
+}
+.answer {
+    padding:10px;
+    font-family:Arial;
+    font-size:14px;
+    border:1px solid #f9ece3;
+}
+.acMenu2 p{
+	margin: 0;
+	cursor: pointer;
+	font-weight:bold;
+	list-style-type: none;
+}
+.acMenu2 p:before {
+	font-size: 14px;
+	content: '✧ '; /* ←ここにリストマーカーにしたい文字列を設定 */
+}
+.acMenu2 ul {
+	padding: 5px 0 5px 1em;
+}
+.page-heading {
+    font-size: 16px;
+    border-bottom-style: solid;
+    border-top: 0 none;
+    padding: 16px 0 12px;
+    margin: 0 16px 10px;
+}
+</style>
+{% endblock %}
+
+{% block main %}
+<h1 class="page-heading">よくあるご質問</h1>
+<div id="faq" class="container-fluid">
+    <ul class="acMenu">
+        <li>
+            <dl>
+                <dt class="question">ご注文について</dt>
+                <dd class="answer">
+                    <ul>
+                        <li class="acMenu2"><p>ご注文の受付方法</p>
+                            <ul>
+								<li>
+								買い物カゴ、またはメールにてご注文を承ります。<br>
+								最後まで説明をよくお読みいただき、内容に同意いただいた上で
+								ご注文くださるようお願いいたします。<br>
+								※電話、ファックスによるご注文は現在受け付けておりません。<br>
+								通信販売のみとなりますので、ご了承くださいませ。<br>
+								<br>
+								ご注文後、すぐに自動返信メールが届きます。<br>
+								クレジットカードでご注文→受注確認メール→商品入荷後、発送→発送メールが届きます。<br>
+								<br>
+								銀行振込・郵便振替でご注文→受注確認メール→お振込・お振替確認後商品入荷、発送→発送メールが届きます。<br>
+								<br>
+								※当サイトでは複数店舗で在庫を共有しており、 在庫数更新が間に合わずご注文頂いた商品が欠品となる場合もございます。<br>
+								※生産中止・商品完売の場合、商品完売メールをお送りいたします<br>
+								大変ご迷惑をお掛けする場合がございますが、あらかじめご了承くださいませ。
+								</li>
+                            </ul>
+                        </li>
+                        <li class="acMenu2"><p>注文メールと連絡メールが届かない場合は？</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                        <li class="acMenu2"><p>送料について</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                        <li class="acMenu2"><p>ご注文対応、メールの送受信</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                        <li class="acMenu2"><p>キャンセルについて</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                    </ul>
+                </dd>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt class="question">配達・納期</dt>
+                <dd class="answer">
+                    <ul>
+                        <li class="acMenu2"><p>納期はどのぐらいでしょうか？</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                        <li class="acMenu2"><p>〇〇日までに商品を受け取りたいのですが。</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                        <li class="acMenu2"><p>局留めは可能ですか？</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                        <li class="acMenu2"><p>「品名」はどの様に明記されますか？</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                    </ul>
+                </dd>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt class="question">サイズ</dt>
+                <dd class="answer">
+                    <ul>
+                        <li class="acMenu2"><p>サイズ指定の料金は？</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                        <li class="acMenu2"><p>サイズ指定はどのくらいで出来ますか？</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                        <li class="acMenu2"><p>商品の生地やデザインの変更は出来ますか？</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                        <li class="acMenu2"><p>既成商品のサイズ直しは出来ますか？</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                        <li class="acMenu2"><p>サイズに迷ってます。オススメサイズ教えて頂けますか？</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                    </ul>
+                </dd>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt class="question">お支払いについて</dt>
+                <dd class="answer">
+                    <ul>
+                        <li class="acMenu2"><p>お支払い方法</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                        <li class="acMenu2"><p>クレジットカードでのお支払方法</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                        <li class="acMenu2"><p>注文の支払方法の変更はできますか？</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                    </ul>
+                </dd>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt class="question">返品・交換</dt>
+                <dd class="answer">
+                    <ul>
+                        <li class="acMenu2"><p>返品・交換について</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                        <li class="acMenu2"><p>届いた商品が破損・欠品しています</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                        <li class="acMenu2"><p>注文と同じサイズの衣装が届いたんですが、サイズが合わないので、返品交換できますか？</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                        <li class="acMenu2"><p>サイズは注文内容と異なる商品が届いた</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                    </ul>
+                </dd>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt class="question">その他</dt>
+                <dd class="answer">
+                    <ul>
+                        <li class="acMenu2"><p>ショップで注文しましたが、注文確認メールが届きません</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                        <li class="acMenu2"><p>急に衣装が必要になりました。早めに届けてくれませんか？</p>
+                            <ul>
+								<li>
+								Answer 01<br />Answer 01<br />Answer 01<br />Answer 01
+								</li>
+                            </ul>
+						</li>
+                    </ul>
+                </dd>
+            </dl>
+        </li>
+    </ul>
+</div>
+<br /><br />
+{% endblock %}

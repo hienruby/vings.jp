@@ -1,0 +1,30 @@
+Plugin\ProductMeta\Entity\ProductMeta:
+    type: entity
+    table: plg_product_meta
+    repositoryClass: Plugin\ProductMeta\Repository\ProductMetaRepository
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            column: product_id
+            generator:
+                strategy: NONE
+    fields:
+        author:
+            type: text
+            nullable: true
+        description:
+            type: text
+            nullable: true
+        keyword:
+            type: text
+            nullable: true
+        meta_robots:
+            type: text
+            nullable: true
+        meta_tags:
+            type: text
+            nullable: true
+    lifecycleCallbacks: {  }

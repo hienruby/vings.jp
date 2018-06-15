@@ -1,0 +1,8 @@
+name: 規格詳細表示
+code: ClassNameDetail
+event: ClassNameDetail
+version: 1.0.0
+service:
+    - ClassNameDetailServiceProvider
+const:
+    division: ／

@@ -1,0 +1,46 @@
+Plugin\CartAnalytics\Entity\CartAnalytics:
+    type: entity
+    table: plg_cart_analytics
+    repositoryClass: Plugin\CartAnalytics\Repository\CartAnalyticsRepository
+    id:
+        cart_analytics_id:
+            type: string
+            length: 32
+            nullable: false
+            id: true
+        product_class_id:
+            type: integer
+            nullable: false
+            unsigned: true
+            id: true
+    fields:
+        product_id:
+            type: integer
+            nullable: false
+            unsigned: true
+        quantity:
+            type: decimal
+            nullable: false
+            precision: 10
+            scale: 0
+        price:
+            type: decimal
+            nullable: false
+            precision: 10
+            scale: 0
+        buy_flg:
+            type: smallint
+            nullable: false
+            unsigned: true
+            options:
+                default: '0'
+        add_date:
+            type: date
+            nullable: false
+        create_date:
+            type: datetime
+            nullable: false
+        update_date:
+            type: datetime
+            nullable: false
+    lifecycleCallbacks: {  }

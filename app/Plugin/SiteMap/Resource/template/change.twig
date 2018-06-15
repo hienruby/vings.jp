@@ -1,0 +1,50 @@
+{#
+* Plugin Name : SiteMap
+*
+* Copyright (C) BraTech Co., Ltd. All Rights Reserved.
+* http://www.bratech.co.jp/
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+#}
+
+{% extends 'default_frame.twig' %}
+
+{% block title %}設定変更{% endblock %}
+
+{% block main %}
+  <div class="row">
+    <div class="col-md-12">
+      <div class="box">
+        <div class="box-header with-arrow">
+          変更しました。
+        </div>
+        <div class="box-body">
+          <div class="table_list">
+            <div class="table-responsive with-border">
+              <table class="table table-striped">
+                <tbody>
+                  <tr>
+                    <td>
+                      更新頻度
+                    </td>
+                    <td>
+                      {{ data.changefreq }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      重要度
+                    </td>
+                    <td>
+                      {{ data.priority }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+  <a href=" {{ url('sitemap_setting') }} ">設定画面に戻る</a>
+{% endblock %}

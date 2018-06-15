@@ -1,0 +1,521 @@
+{#
+ This file is part of the PostCarrier
+
+ Copyright(c) 2016 IPLOGIC CO.,LTD. All Rights Reserved.
+ http://www.iplogic.co.jp/
+
+ For the full copyright and license information, please view the LICENSE
+ file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set menus = ['postcarrier', menu] %}
+
+{% block title %}ポストキャリア管理{% endblock %}
+{% block sub_title %}配信履歴{% endblock %}
+
+{% block javascript %}
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.core.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.widget.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.mouse.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.sortable.min.js"></script>
+{% endblock %}
+
+{% block main %}
+
+    <div class="table_list">
+        <div class="table-responsive with-border">
+{% if search_data.trigger == 'event' or search_data.trigger == 'periodic' %}
+            {% if search_data.event == 'commitData' or search_data.event == 'orderDate' %}
+	    {%     set colspan='colspan="3"' %}
+	    {% else %}
+	    {%     set colspan='colspan="2"' %}
+            {% endif %}
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <th>ステップメール条件</th>
+                    </tr>
+                    <tr>
+                        <td>{{ search_data.triggerDisp2 }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+	    {% if search_data.event == 'paymentDate' or search_data.event == 'orderDate' or search_data.event == 'latestOrderDate' or search_data.event == 'commitDate' or search_data.event == 'latestCommitDate' %}
+
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <th {{ colspan|raw }}>■配信条件&nbsp;（設定した条件に該当する受注を対象としてメールが配信されます）</th>
+                    </tr>
+		    {% if search_data.event == 'paymentDate' or search_data.event == 'orderDate' or search_data.event == 'latestOrderDate' or search_data.event == 'commitDate' or search_data.event == 'latestCommitDate' %}
+                    {% if 0 < search_data.OrderDetails|length %}
+                    <tr>
+                        <td {{ colspan|raw }}>{{ search_data.event_buy_product_id_conjunction }}</td>
+                    </tr>
+                    <tr>
+                        <th>商品コード</th>
+                        <th>商品名</th>
+                        {% if search_data.event == 'commitData' or search_data.event == 'orderDate' %}
+                        <th>購入回数</th>
+                        {% endif %}
+                    </tr>
+                    {% for OrderDetail in search_data.OrderDetails %}
+                    <tr>
+                        <td>{{ OrderDetail.product_code }}</td>
+                        <td>{{ OrderDetail.product_name }}</td>
+                        {% if search_data.event == 'commitData' or search_data.event == 'orderDate' %}
+                        <td>
+                            {% if 0 < OrderDetail.quantity %}
+                                {{ OrderDetail.quantity }}回目
+                            {% else %}
+                                毎回
+                            {% endif %}
+                        </td>
+                        {% endif %}
+                    </tr>
+		    {% endfor %}
+		    {% elseif 0 < search_data.event_buy_product_count_only %}
+                    <tr>
+                        <th>商品コード/商品名</th>
+                        <th>購入回数</th>
+                    </tr>
+                    <tr>
+			<td>商品の指定なし</td>
+                        <td>{{ search_data.event_buy_product_count_only }}回目</td>
+                    </tr>
+		    {% else %}
+                    <tr>
+                        <td {{ colspan|raw }}><font color="blue">無条件。購入商品による除外はありません。</font></td>
+                    </tr>
+		    {% endif %}
+		    {% endif %}
+                </tbody>
+            </table>
+
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <th colspan="2">■除外条件&nbsp;（いずれかの条件に一致(OR)した受注の場合、メールは送信されません）</th>
+                    </tr>
+                    {% if 0 < search_data.StopOrderDetails|length %}
+                    <tr>
+                        <th>商品コード</th>
+                        <th>商品名</th>
+                    </tr>
+                    {% for OrderDetail in search_data.StopOrderDetails %}
+                    <tr>
+                        <td>{{ OrderDetail.product_code }}</td>
+                        <td>{{ OrderDetail.product_name }}</td>
+                    </tr>
+                    {% endfor %}
+		    {% else %}
+                    <tr>
+                        <td colspan="2"><font color="blue">無条件。購入商品による除外はありません。</font></td>
+                    </tr>
+		    {% endif %}
+                </tbody>
+            </table>
+            {% endif %}
+{% endif %}
+
+            {% if search_data.mail_type_web %}
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <th colspan="2">本会員を検索する</th>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">顧客ID</th>
+                        <td>
+                            {% if search_data.customer_id is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.customer_id }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">都道府県</th>
+                        <td>
+                            {% if search_data.pref is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.pref }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">お名前</th>
+                        <td>
+                            {% if search_data.name is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.name }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">お名前(フリガナ)</th>
+                        <td>
+                            {% if search_data.kana is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.kana }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">対象会員</th>
+                        <td>
+                            {% if search_data.customer_status is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.customer_status }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">性別</th>
+                        <td>
+                            {% if search_data.sex is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.sex }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">誕生月</th>
+                        <td>
+                            {% if search_data.birth_month is null %}
+                                (未指定)
+                            {% elseif search_data.birth_month == 0 %}
+                                今月
+                            {% else %}
+                                {{ search_data.birth_month }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">誕生日</th>
+                        <td>
+                            {% if search_data.birth_date_start is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.birth_date_start|date("Y/m/d") }}
+                            {% endif %}
+                            ～
+                            {% if search_data.birth_date_end is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.birth_date_end|date("Y/m/d") }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">メールアドレス</th>
+                        <td>
+                            {% if search_data.email is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.email }}
+                                {% if search_data.not_emailinc %}（除外条件）{% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">電話番号</th>
+                        <td>
+                            {% if search_data.tel is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.tel }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">会員登録日</th>
+                        <td>
+                            {% if search_data.create_date_start is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.create_date_start|date("Y/m/d") }}
+                            {% endif %}
+                            ～
+                            {% if search_data.create_date_end is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.create_date_end|date("Y/m/d") }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">受注ID</th>
+                        <td>
+                            {% if search_data.order_id_start is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.order_id_start|date("Y/m/d") }}
+                            {% endif %}
+                            ～
+                            {% if search_data.order_id_end is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.order_id_end|date("Y/m/d") }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">対応状況</th>
+                        <td>
+                            {% if search_data.status is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.status }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">支払方法</th>
+                        <td>
+                            {% if search_data.payment is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.payment }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">初回購入日</th>
+                        <td>
+                            {% if search_data.first_buy_start is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.first_buy_start|date("Y/m/d") }}
+                            {% endif %}
+                            ～
+                            {% if search_data.first_buy_end is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.first_buy_end|date("Y/m/d") }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">最終購入日</th>
+                        <td>
+                            {% if search_data.last_buy_start is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.last_buy_start|date("Y/m/d") }}
+                            {% endif %}
+                            ～
+                            {% if search_data.last_buy_end is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.last_buy_end|date("Y/m/d") }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">受注日</th>
+                        <td>
+                            {% if search_data.order_date_start is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.order_date_start|date("Y/m/d") }}
+                            {% endif %}
+                            ～
+                            {% if search_data.order_date_end is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.order_date_end|date("Y/m/d") }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">入金日</th>
+                        <td>
+                            {% if search_data.payment_date_start is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.payment_date_start|date("Y/m/d") }}
+                            {% endif %}
+                            ～
+                            {% if search_data.payment_date_end is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.payment_date_end|date("Y/m/d") }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">発送日</th>
+                        <td>
+                            {% if search_data.commit_date_start is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.commit_date_start|date("Y/m/d") }}
+                            {% endif %}
+                            ～
+                            {% if search_data.commit_date_end is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.commit_date_end|date("Y/m/d") }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">購入商品カテゴリ</th>
+                        <td>
+                            {% if search_data.buy_category is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.buy_category }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">購入商品ID</th>
+                        <td>
+                            {% if search_data.buy_product_id is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.buy_product_id }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">購入商品コード</th>
+                        <td>
+                            {% if search_data.buy_product_code is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.buy_product_code }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">購入商品コード</th>
+                        <td>
+                            {% if search_data.buy_product_code2 is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.buy_product_code2 }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">購入商品名</th>
+                        <td>
+                            {% if search_data.buy_product_name is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.buy_product_name }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">購入金額</th>
+                        <td>
+                            {% if search_data.buy_total_from is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.buy_total_from }}
+                            {% endif %}
+                            ～
+                            {% if search_data.buy_total_to is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.buy_total_to }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">購入回数</th>
+                        <td>
+                            {% if search_data.buy_times_from is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.buy_times_from }}
+                            {% endif %}
+                            ～
+                            {% if search_data.buy_times_to is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.buy_times_to }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            {% endif %}
+
+            {% if search_data.mail_type_c %}
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <th colspan="2">メルマガ専用会員を検索する</th>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">メルマガグループ</th>
+                        <td>
+                            {% if search_data.group is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.group }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">メールアドレス</th>
+                        <td>
+                            {% if search_data.email_c is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.email_c }}
+                                {% if search_data.not_emailinc_c %}（除外条件）{% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">登録日</th>
+                        <td>
+                            {% if search_data.g_create_date_start is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.g_create_date_start|date("Y/m/d") }}
+                            {% endif %}
+                            ～
+                            {% if search_data.g_create_date_end is null %}
+                                (未指定)
+                            {% else %}
+                                {{ search_data.g_create_date_end|date("Y/m/d") }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">本会員との重複アドレス</th>
+                        <td>
+                            {% if search_data.repeat_address_c is null %}
+                                (未指定)
+                            {% else %}
+                                {% if search_data.repeat_address_c %}除く{% else %}除かない{% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+    </div>
+        <div class="row">
+            <div class="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-5 text-center btn_area">
+                <p><a href="javascript:void(0)" class="btn btn-primary btn-block btn-lg" onclick="window.history.back(-1); return false;">戻る</a></p>
+            </div>
+        </div>
+</form>
+
+{% endblock %}

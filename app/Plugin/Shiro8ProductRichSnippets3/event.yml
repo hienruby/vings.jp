@@ -1,0 +1,2 @@
+eccube.event.route.product_detail.response:
+    - [onRenderProductDetail, NORMAL]

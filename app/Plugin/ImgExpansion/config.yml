@@ -1,0 +1,6 @@
+name: 商品画像拡大(FREE版)
+code: ImgExpansion
+version: 1.0.0
+event: ImgExpansionEvent
+service:
+    - ImgExpansionServiceProvider

@@ -1,0 +1,10 @@
+name: 商品別meta設定
+code: ProductMeta
+version: 1.0.0
+event: ProductMetaEvent
+service:
+    - ProductMetaServiceProvider
+orm.path:
+    - /Resource/doctrine
+const:
+    stext_len: 150

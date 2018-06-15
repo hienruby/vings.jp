@@ -1,0 +1,67 @@
+{% extends 'default_frame.twig' %}
+
+{% block main %}
+<style>
+.product_lf{
+display:none;
+}
+
+.page-heading {
+padding-bottom:0;
+margin-bottom: 0;
+}
+.faq-name{
+float: left;
+display: block;
+}
+.faq-name li::before{
+content: "? ";
+color: red;
+}
+.faq-name li{
+    display: block;
+    line-height: 20px;
+}
+ a{
+    color: #563924;
+}
+a:hover{
+    color: red;
+    text-decoration: underline;
+}
+.faq-name span{
+    font-weight: bold;
+    line-height: 20px;
+    background-image: linear-gradient(to bottom, #f5cdb4 , #f9ece3);
+    display: block;
+    padding-left: 8px;
+}
+.faq-name{
+    padding:5px;
+}
+#faq-noidung{
+    margin-top: 5px;
+}
+
+</style>
+    <div id="contents" class="main_only">
+        <div id="privacy_wrap" class="container-fluid1 inner no-padding">
+            <div id="main1">
+                <h1 class="page-heading">ご注文対応、メールの送受信</h1>
+                <div id="" class="container-fluid">
+					<span class="mediumtext"><p><font face="Arial">営業時間：平日11:00～16:00(定休日：土日祝)<br>
+・メールでのご連絡、お問い合わせやご注文などは24時間受付ております。<br>
+・土日祝に頂きましたご注文やお問い合わせにつきましては、翌営業日に順次対応させて頂きます。<br>
+
+ご不明の点などはお気軽にお問い合わせください。<br><br>
+
+※ご注文につきまして※<br>
+お客様が買い物カゴでご注文やお問合せメールを送信されてから、2営業日経過しても当店から返信がない場合、
+何らかの送受信エラーが発生している可能性がございます。<br>
+その際はお手数ですが、メールやお電話にてお問い合わせてくださいませ。<br>
+					</font>    </span>
+				</div><!-- /.col -->
+            </div>
+        </div>
+    </div>
+{% endblock %}

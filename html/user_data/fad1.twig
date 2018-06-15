@@ -1,0 +1,99 @@
+{% extends 'default_frame.twig' %}
+
+{% block main %}
+<style>
+.product_lf{
+display:none;
+}
+
+.page-heading {
+padding-bottom:0;
+margin-bottom: 0;
+}
+.faq-name{
+float: left;
+display: block;
+}
+.faq-name li::before{
+content: "? ";
+color: red;
+}
+.faq-name li{
+    display: block;
+    line-height: 20px;
+}
+ a{
+    color: #563924;
+}
+a:hover{
+    color: red;
+    text-decoration: underline;
+}
+.faq-name span{
+    font-weight: bold;
+    line-height: 20px;
+    background-image: linear-gradient(to bottom, #f5cdb4 , #f9ece3);
+    display: block;
+    padding-left: 8px;
+}
+.faq-name{
+    padding:5px;
+}
+#faq-noidung{
+    margin-top: 5px;
+}
+
+</style>
+    <div id="contents" class="main_only">
+        <div id="privacy_wrap" class="container-fluid1 inner no-padding">				
+			<div id="main1">
+			<div class="box27">
+				<span class="box-title">ご注文について</span>
+				<p><ul class="qanda">
+					<li><a href="http://vings.jp/user_data/faq1">ご注文の受付方法</a></li>
+					<li><a href="http://vings.jp/user_data/faq2">注文メールと連絡メールが届かない場合は？</a></li>
+					<li><a href="http://vings.jp/user_data/faq3">送料について</a></li>
+					<li><a href="http://vings.jp/user_data/faq4">ご注文対応、メールの送受信</a></li>
+					<li><a href="http://vings.jp/user_data/faq5">キャンセルについて</a></li>
+				</ul>
+				</p></div>
+                <h1 class="page-heading">ご注文の受付方法</h1>
+                <div id="" class="container-fluid">
+					<span class="mediumtext"><p><font face="Arial">買い物カゴ、またはメールにてご注文を承ります。<br>
+					最後まで説明をよくお読みいただき、内容に同意いただいた上で<br>
+					ご注文くださるようお願いいたします。<br>
+					※電話、ファックスによるご注文は現在受け付けておりません。<br>
+					通信販売のみとなりますので、ご了承くださいませ。</font></p>
+					<p><font face="Arial">ご注文後、すぐに自動返信メールが届きます。<br>
+					クレジットカードでご注文→受注確認メール→商品入荷後、発送→発送メールが届きます。 </font></p>
+					<p><font face="Arial">銀行振込・郵便振替でご注文→受注確認メール→お振込・お振替確認後商品入荷、発送→発送メールが届きます。<br>
+				</font></p>
+					<p><font face="Arial">※当サイトでは複数店舗で在庫を共有しており、
+					在庫数更新が間に合わずご注文頂いた商品が欠品となる場合もございます。<br>
+					※生産中止・商品完売の場合、商品完売メールをお送りいたします<br>大変ご迷惑をお掛けする場合がございますが、あらかじめご了承くださいませ。&nbsp; </font></p>
+					<font face="Arial">
+					<p><br>
+					※買い物カゴをご利用いただけないお客様は、下記内容をそのままコピーして<br>
+					必要事項をご記入いただき、メール送信していただけますようお願いいたします。</p>
+					<p>＝＝＝＝＝ここから＝＝＝＝＝</p>
+					<p>商品番号：<br>
+					商品名：<br>
+					サイズ：<br>
+					数量：<br>
+					商品価格：<br>
+					お支払い方法：<br>
+					</p>
+					<p>郵便番号：<br>
+					ご住所：<br>
+					お届け先：<br>
+					お名前(ふりがな)：<br>
+					お電話番号：<br>
+					メールアドレス：</p>
+					<p>その他：</p>
+					<p>＝＝＝＝＝ここまで＝＝＝＝＝</p>
+					</font>    </span>
+				</div><!-- /.col -->
+            </div>
+        </div>
+    </div>
+{% endblock %}

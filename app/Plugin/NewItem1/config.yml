@@ -1,0 +1,5 @@
+name: 新着商品
+code: NewItem
+version: 1.0.1
+service:
+    - NewItemServiceProvider

@@ -1,0 +1,222 @@
+{#
+This file is part of the PostCarrier
+
+Copyright(c) 2016 IPLOGIC CO.,LTD. All Rights Reserved.
+
+http://www.iplogic.co.jp/
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set menus = ['postcarrier', 'postcarrier_discard'] %}
+
+{% block title %}ポストキャリア管理{% endblock %}
+{% block sub_title %}配信除外アドレス{% endblock %}
+
+{% form_theme form 'Form/bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block javascript %}
+<script src="{{ app.config.admin_urlpath }}/assets/js/vendor/spin.min.js"></script>
+<script>
+$(function() {
+
+    var opts = {
+        lines: 13,
+        length: 30,
+        width: 2,
+        radius: 12,
+        corners: 1,
+        rotate: 0,
+        direction: 1,
+        color: '#BBB',
+        speed: 1,
+        trail: 67,
+        shadow: true,
+        hwaccel: false,
+        className: 'spinner',
+        zIndex: 2e9,
+        top: top
+    };
+
+    ImageSpinner = new Spinner(opts).spin(document.getElementById('spinner'));
+    ImageSpinner.stop();
+
+    $('#upload-form').submit(function() {
+        $('#upload-button').attr('disabled', 'disabled');
+        $('#download-button').attr('disabled', 'disabled');
+        ImageSpinner.spin(document.getElementById('spinner'));
+    });
+});
+
+function fnDelete(action) {
+    if (confirm('この除外アドレスを解除しても宜しいですか？')) {
+        document.form2.action = action;
+        document.form2.submit();
+    }
+}
+function changeAction(action) {
+    document.form1.action = action;
+    document.form1.submit();
+}
+var setModeAndSubmit = function(mode, keyname, keyid) {
+    document.form1.mode.value = mode;
+    if(keyname !== undefined && keyname !== "" && keyid !== undefined && keyid !== "") {
+        document.form1[keyname].value = keyid;
+    }
+    document.form1.submit();
+};
+</script>
+{% endblock javascript %}
+
+{% block main %}
+<div class="row">
+    <div class="col-md-12">
+        <form id="form1" class="form-inline" method="post" action="{{ url('admin_postcarrier_discard') }}">
+            <input type="hidden" name="mode" value="">
+            {{ form_widget(form._token) }}
+            <div id="upload_wrap" class="box">
+                <div id="upload_box__header" class="box-header">
+                    <h3 class="box-title">配信除外アドレス登録</h3>
+                </div><!-- /.box-header -->
+                <div id="upload_box__body" class="box-body">
+                    <div class="form-group">
+                        <label>配信除外アドレス</label>
+                        {{ form_widget(form.email) }}
+                        {{ form_errors(form.email) }}
+			<button type="submit" name="action" value="search" class="btn btn-primary btn-sm">検索</button>
+			<button type="submit" name="action" value="add" class="btn btn-primary btn-sm">登録</a>
+                    </div>
+                </div><!-- /.box-body -->
+{#
+                <div class="box-footer text-center">
+                    <button id="upload-button" type="submit" class="btn btn-primary btn-sm">CSVファイルのアップロード</button>
+                </div><!-- /.box-footer -->
+#}
+            </div><!-- /.box -->
+        </form>
+    </div><!-- /.col -->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <form id="upload-form" class="form-inline" method="post" action="{{ url('admin_postcarrier_discard_csv_import') }}" {{ form_enctype(form) }}>
+            <input type="hidden" id="postcarrier_discard__token" name="postcarrier_discard[_token]" class="form-control" value="{{ form._token.vars.value }}">
+            <div id="upload_wrap" class="box">
+                <div id="upload_box__header" class="box-header">
+                    <h3 class="box-title">配信除外アドレス一括登録</h3>
+                </div><!-- /.box-header -->
+                <div id="upload_box__body" class="box-body">
+                    <div id="upload_box__body_inner" class="form-group">
+                        <div id="upload_box__file" class="col-sm-7">
+                            {{ form_widget(form.import_file, {'attr': {'accept': 'text/csv,text/tsv'}}) }}
+                            {{ form_errors(form.import_file) }}
+                        </div>
+                        {% for error in errors %}
+                            <div id="upload_box__error" class="text-danger">{{ error.message }}</div>
+                        {% endfor %}
+                    </div>
+                    <div id="spinner"></div>
+                </div><!-- /.box-body -->
+                <div class="box-footer text-center">
+                    <button id="upload-button" type="submit" class="btn btn-primary btn-sm">CSVファイルのアップロード</button>
+                </div><!-- /.box-footer -->
+            </div><!-- /.box -->
+        </form>
+    </div><!-- /.col -->
+</div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                {% if pagination and pagination.totalItemCount > 0 %}
+                <div class="box-header">
+                    <h3 class="box-title">総件数 <span class="normal"><strong>{{ pagination.totalItemCount }} 件</strong> </span></h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <form name="form2" id="form2" method="post" action="">
+                        {% include "pager.twig" with { 'pages' : pagination.paginationData, 'routes' : 'admin_postcarrier_discard_page' } %}
+
+			<div class="row">
+                            <div class="col-md-12">
+				<ul class="sort-dd">
+                                    <li id="result_list_main__pagemax_menu" class="dropdown">
+					{% for pageMax in pageMaxis if pageMax.name == page_count %}
+                                        <a id="result_list_main__pagemax_menu_toggle" class="dropdown-toggle" data-toggle="dropdown">{{ pageMax.name|e }}件<svg class="cb cb-angle-down icon_down"> <use xlink:href="#cb-angle-down" /></svg></a>
+                                        <ul class="dropdown-menu">
+					    {% endfor %}
+					    {% for pageMax in pageMaxis if pageMax.name != page_count %}
+                                            <li><a href="{{ path('admin_postcarrier_discard_page', {'page_no': 1, 'page_count': pageMax.name}) }}">{{ pageMax.name|e }}件</a></li>
+					    {% endfor %}
+                                        </ul>
+                                    </li>
+                                    {# var3.0.0では未対応
+                                    <li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown">CSVダウンロード<svg class="cb cb-angle-down icon_down"><use xlink:href="#cb-angle-down"></svg></a>
+					<ul class="dropdown-menu">
+                                            <li><a>ダウンロード</a></li>
+                                            <li><a>出力項目設定</a></li>
+					</ul>
+                                    </li>
+                                    #}
+				</ul>
+                            </div>
+			</div>
+
+                        <div class="table_list">
+                            <div class="table-responsive with-border">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>配信除外アドレス</th>
+                                        <th style="text-align: center">登録日</th>
+                                        <th style="text-align: center">登録方法</th>
+                                        <th style="text-align: center">削除</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for Discard in pagination %}
+                                        <tr>
+                                            <td>{{ Discard.address }}</td>
+                                            <td style="text-align: center">{{ Discard.dateCreated|date('Y/m/d H:i') }}</td>
+                                            <td style="text-align: center">{% if Discard.auto %}自動{% else %}手動{% endif %}</td>
+                                            <td style="text-align: center"><a href="#" onclick="fnDelete('{{ url('admin_postcarrier_discard_delete', { email: Discard.address }) }}'); document.form2.submit(); return false;">削除</a></td>
+
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="row">
+                    <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 text-center btn_area">
+		        <form name="form3" id="form3" method="post" action="{{ url('admin_postcarrier_discard_export') }}">
+  		            <button id="download-button" type="submit" class="btn btn-primary btn-sm">CSVファイルのダウンロード</button>
+		        </form>
+                    </div>
+                </div>
+                {% else %}
+                    {# データがない場合 #}
+                    <div class="box-header with-arrow">
+                        <h3 class="box-title">該当するデータがありませんでした。</h3>
+                    </div><!-- /.box-header -->
+                {% endif %}
+            </div><!-- /.box -->
+        </div>
+    </div>
+
+
+{% endblock %}

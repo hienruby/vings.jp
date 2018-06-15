@@ -1,0 +1,206 @@
+{#
+ This file is part of the PostCarrier
+
+ Copyright(c) 2016 IPLOGIC CO.,LTD. All Rights Reserved.
+ http://www.iplogic.co.jp/
+
+ For the full copyright and license information, please view the LICENSE
+ file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set menus = ['postcarrier', 'postcarrier_template'] %}
+
+{% block title %}メルマガ管理{% endblock %}
+{% block sub_title %}テンプレート設定{% endblock %}
+
+{% form_theme form 'Form/bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block stylesheet %}
+{% endblock stylesheet %}
+
+{% block javascript %}
+<script src="{{ app.request.getBasePath }}{{ app.config.plugin_html_urlpath }}/postcarrier/assets/js/postcarrier.js"></script>
+<script src="{{ app.request.getBasePath }}{{ app.config.plugin_html_urlpath }}/postcarrier/assets/js/ckeditor/ckeditor.js"></script>
+<script>
+var postcarrier_adminUrlPath = "{{ app.request.getBasePath }}{{ app.config.plugin_html_urlpath }}/postcarrier/assets/";
+var postcarrier_preview_url = "{{ url('admin_postcarrier_preview') }}";
+
+$(function() {
+    selectMailMethod(true);
+
+    {% if form.mail_method.vars.value == 1 %}
+    //loadEditor('PC');
+    {% endif %}
+
+    $('input[name=postcarrier_template_edit\\[mail_method\\]],input[name=postcarrier_template_edit\\[sendFor\\]]').on('click', function() {
+        selectMailMethod();
+    });
+
+    $('#postcarrier_insert_to_subject').on('click', function() {
+        insertToSubject();
+    });
+    $('#postcarrier_insert_to_body').on('click', function() {
+        insertListValue();
+    });
+    $('#postcarrier_insert_to_subbody').on('click', function() {
+        insertListValueSubBody();
+    });
+});
+</script>
+{% endblock javascript %}
+
+{% block main %}
+    <form role="form" name="form1" id="form1" method="post"
+          action="{{ url('admin_postcarrier_template_commit') }}">
+        {{ form_widget(form._token) }}
+        {{ form_widget(form.id) }}
+        <div id="detail_wrap" class="col-md-12">
+            <div class="col_inner">
+
+            <div id="customer_info_box"  class="box accordion">
+                <div id="customer_info_box__toggle" class="box-header toggle active">
+                    <h3 class="box-title">管理情報  ※管理用情報であり配信には使用されません<svg class="cb cb-angle-down icon_down"> <use xlink:href="#cb-angle-down" /></svg></h3>
+                </div><!-- /.box-header -->
+                <div id="customer_info_box__body" class="box-body accpanel" style="display: block;">
+                    <div id="customer_info_list" class="order_list form-horizontal">
+                        <div class="form-group">
+                            {{ form_label(form.adm_name) }}
+                            <div class="col-sm-9 col-lg-10">
+                                {{ form_widget(form.adm_name) }}
+                                {{ form_errors(form.adm_name) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.adm_note) }}
+                            <div class="col-sm-9 col-lg-10">
+                                {{ form_widget(form.adm_note) }}
+                                {{ form_errors(form.adm_note) }}
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+
+                <div class="box form-horizontal">
+                    <div class="box-header">
+                        <h3 class="box-title">テンプレート編集</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+
+                        <div class="form-group">
+                            {{ form_label(form.mail_method) }}
+                            <div class="col-sm-9 col-lg-10">
+                                {{ form_widget(form.mail_method) }}
+                                {{ form_errors(form.mail_method) }}
+                            </div>
+                        </div>
+{#
+                        <div class="form-group">
+                            {{ form_label(form.sendFor) }}
+                            <div class="col-sm-9 col-lg-10">
+                                {{ form_widget(form.sendFor) }}
+                                {{ form_errors(form.sendFor) }}
+                            </div>
+                        </div>
+#}
+                        <div class="form-group">
+                            {{ form_label(form.fromAddr) }}
+                            <div class="col-sm-9 col-lg-10">
+                                {{ form_widget(form.fromAddr) }}
+                                {{ form_errors(form.fromAddr) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.fromDisp) }}
+                            <div class="col-sm-9 col-lg-10">
+                                {{ form_widget(form.fromDisp) }}
+                                {{ form_errors(form.fromDisp) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.replytoAddr) }}
+                            <div class="col-sm-9 col-lg-10">
+                                {{ form_widget(form.replytoAddr) }}
+                                {{ form_errors(form.replytoAddr) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.replytoDisp) }}
+                            <div class="col-sm-9 col-lg-10">
+                                {{ form_widget(form.replytoDisp) }}
+                                {{ form_errors(form.replytoDisp) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(form.subject) }}
+                            <div class="col-sm-9 col-lg-10">
+                                {{ form_widget(form.subject) }}
+                                {{ form_errors(form.subject) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(form.subject_item) }}
+                            <div class="col-sm-9 col-lg-4">
+                                {{ form_widget(form.subject_item) }}
+                                {{ form_errors(form.subject_item) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-9 col-lg-8">
+			        <button id="postcarrier_insert_to_subject" class="btn btn-default btn-sm" type="button">件名に差し込む</button>
+			        <button id="postcarrier_insert_to_body" class="btn btn-default btn-sm" type="button">本文に差し込む</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(form.body) }}
+                            <div class="col-sm-9 col-lg-8">
+                                {{ form_widget(form.body) }}
+                                {{ form_errors(form.body) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(form.sub_body_item) }}
+                            <div class="col-sm-9 col-lg-4">
+                                {{ form_widget(form.sub_body_item) }}
+                                {{ form_errors(form.sub_body_item) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-9 col-lg-8">
+			        <button id="postcarrier_insert_to_subbody" class="btn btn-default btn-sm" type="button">代替本文に差し込む</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(form.sub_body) }}
+                            <div class="col-sm-9 col-lg-8">
+                                <p>HTML本文が表示できない機種の場合に表示する代替テキスト本文</p>
+                                <p><font color="red">テキストメール希望の会員宛には、この代替テキスト本文をテキストメールとして送信できます。
+                                その場合は、意味のあるテキストを入力してください。</font></p>
+                                {{ form_widget(form.sub_body) }}
+                                {{ form_errors(form.sub_body) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+	    <div class="row">
+                <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 text-center btn_area">
+                    <a href="javascript:void(0)" class="btn btn-primary btn-lg" onclick="if(window.confirm('現在の編集内容を破棄してよろしいでしょうか？')){ window.history.back(-1); } return false;">一覧画面に戻る</a>
+                    <a href="javascript:void(0)" class="btn btn-primary btn-lg" onclick="document.form1.submit(); return false;">この内容で登録する</a>
+                </div>
+            </div>
+            <div style="display: none">
+                {{ form_rest(form) }}
+            </div>
+        </div>
+    </form>
+{% endblock %}

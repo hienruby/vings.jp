@@ -1,0 +1,61 @@
+{% extends 'default_frame.twig' %}
+
+{% block main %}
+<style>
+.product_lf{
+display:none;
+}
+
+.page-heading {
+padding-bottom:0;
+margin-bottom: 0;
+}
+.faq-name{
+float: left;
+display: block;
+}
+.faq-name li::before{
+content: "? ";
+color: red;
+}
+.faq-name li{
+    display: block;
+    line-height: 20px;
+}
+ a{
+    color: #563924;
+}
+a:hover{
+    color: red;
+    text-decoration: underline;
+}
+.faq-name span{
+    font-weight: bold;
+    line-height: 20px;
+    background-image: linear-gradient(to bottom, #f5cdb4 , #f9ece3);
+    display: block;
+    padding-left: 8px;
+}
+.faq-name{
+    padding:5px;
+}
+#faq-noidung{
+    margin-top: 5px;
+}
+
+</style>
+    <div id="contents" class="main_only">
+        <div id="privacy_wrap" class="container-fluid1 inner no-padding">
+            <div id="main1">
+                <h1 class="page-heading">納期はどのぐらいでしょうか？</h1>
+                <div id="" class="container-fluid">
+					<span class="mediumtext"><p><font face="Arial">既製品は１週間から１０日前後でのお届け予定でございます。<br> 受注生産品は、２週間から１か月前後でのお届け予定でございます。<br> 商品毎にお届け日数は異なりますので、必ず商品詳細のご確認をお願いいたします。<br> <br> 
+				※お届け先の地域やご希望のお支払い方法によって異なります。<br> 
+※天候・交通状況等の影響により、遅れが生じる場合もございます。<br> 
+    
+					</font>    </span>
+				</div><!-- /.col -->
+            </div>
+        </div>
+    </div>
+{% endblock %}

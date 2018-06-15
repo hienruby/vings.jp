@@ -1,0 +1,81 @@
+{#
+* Plugin Name : SiteMap
+*
+* Copyright (C) BraTech Co., Ltd. All Rights Reserved.
+* http://www.bratech.co.jp/
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+#}
+
+{% extends 'default_frame.twig' %}
+
+{% block title %}サイトマップ{% endblock %}
+{% block sub_title %}閲覧{% endblock %}
+
+{% block main %}
+
+{% for item in data %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="box">
+      <div class="box-header with-arrow">
+        {{ item.name }}
+      </div><!-- /.box-header -->
+        <div class="box-body">
+          <div class="table_list">
+            <div class="table-responsive with-border">
+              <table class="table table-striped">
+                <thead>
+                <tr>
+                  <th>url</th>
+                  {% if item.url == 'product_detail' %}
+                    <th>name</th>
+                  {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% if item.url == 'product_list' %}
+                  {% for item2 in categories %}
+                    <tr>
+                      <td class="url">
+                          <a href="{{ url(item.url) }}?category_id={{ item2.id }}"> {{ url(item.url) }}?category_id={{ item2.id }} </a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                {% elseif item.url == 'product_detail' %}
+                  {% for item3 in details %}
+                    <tr>
+                      <td class="url">
+                          <a href="{{ url(item.url, {'id': item3.id}) }}"> {{ url(item.url, {'id': item3.id}) }} </a>
+                      </td>
+                      <td class="name">
+                          {{ item3.name }}
+                      </td>
+                    </tr>
+                  {% endfor %}
+                {% elseif item.edit_flg == 0 %}
+                  <tr>
+                    <td class="url">
+                        <a href="{{ url(app.config.user_data_route, {'route': item.url}) }}"> {{ url(app.config.user_data_route, {'route': item.url}) }} </a>
+                    </td>
+                  </tr>
+                {% else %}
+                  <tr>
+                    <td class="url">
+                        <a href="{{ url(item.url) }}"> {{ url(item.url) }} </a>
+                    </td>
+                  </tr>
+                {% endif %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div><!-- /.box-body -->
+    </div><!-- /.box -->
+  </div><!-- /.col -->
+</div>
+
+
+{% endfor %}
+{% endblock main %}

@@ -1,0 +1,7 @@
+name: ようこそプラグイン
+version: 1.0
+code: Shiro8Welcome3
+service:
+    - Shiro8Welcome3ServiceProvider
+orm.path:
+    - /Resource/doctrine

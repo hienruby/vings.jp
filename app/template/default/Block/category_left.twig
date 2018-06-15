@@ -1,0 +1,243 @@
+<style>
+.item_gallery2 h4 {
+background: url("/user_data/bak/categori.png");
+    height: 35px;
+    line-height: 35px;
+    padding-left: 40px;
+    border-radius: 5px 5px 0 0;
+box-shadow: 1px 1px 1px 1px rgba(107, 29, 34, 0.83);
+margin:2px 0;
+font-size: 13px;
+color: #fff;
+}
+
+.category-nav2 span {
+width: 100%;
+color: #333;
+background: rgb(255, 192, 203);
+padding-top: 4px;
+border-radius: 5px 5px 0px 0;
+border-bottom: 1px sol;
+box-shadow: 1px 1px 1px 1px #9b7c88;
+text-align: center;
+display: block;
+line-height: 30px;
+}
+.category-nav2 {
+border:none;
+text-align: left;
+border-right: rgba(167, 127, 127, 0.59) 1px solid;
+}
+#category2 {
+line-height: 20px;
+padding: 0px;
+margin-bottom:10px;
+}
+.category-nav2 li ul {
+padding-left:10px;
+width: 100%;
+}
+.category-nav2 li {
+background-image:url("/user_data/images/bak.png") top no-repeat;
+position: relative;
+display: block;
+border-bottom: rgba(167, 127, 127, 0.59) 1px solid;
+border-top:none;
+line-height:30px;
+}
+ .category-nav2 li ul, .category-nav1 li ul li ul{
+display:none;
+}
+
+.category-nav2 li > a {
+color:#563924;
+display: inline-block;
+font-size:13px;
+line-height:30px;
+padding-left: 10px;
+position: relative;
+z-index: 10;
+}
+.category-nav2 li > a:hover{ background: rgba(192, 156, 87, 0.44);}
+.category-nav2 li {
+background-image: url("/user_data/images/bar.png");
+background-repeat:no-repeat;
+background-size: 5px 30px;
+}
+
+.category-nav2 li ul li  a:after { content: " ";}
+</style>
+<style>
+.item_gallery h4 + .border > .sp-catBox {
+margin-top: 3px;
+}
+
+.sp-cat2 .category-nav2 li {
+  line-height: normal;
+  background: none;
+  padding: 0;
+}
+
+.sp-cat2 .category-nav2 li ul{
+ transition: none;
+ 
+}
+.sp-cat2 .category-nav2 li a{
+    background-image: url(/user_data/images/bar.png);
+    background-repeat:no-repeat;
+    background-size: 5px 100%;
+    display: inline-block;
+    height: 25px;
+    font-size: 12px;
+    line-height: 25px;
+    margin: 0;
+    padding: 0 0 0 10px;
+    position: relative;
+    z-index: 2;
+}
+.sp-cat2 .category-nav2 li a:hover {
+    opacity: .7;
+    background-color: transparent;
+}
+
+.sp-cat2 .category-nav2 li a:after {
+    display: none;
+}
+
+.sp-catBox .category-nav2 span {
+    background: none;
+    border: none;
+    box-shadow: none;
+    height: 20px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+.sp-catBox .category-nav2 span:hover {
+    cursor: pointer;
+    opacity: .7;
+}
+.drawer.sp .sp-catBox .category-nav2 span {
+  height: 30px;
+}
+
+
+.sp-catBox .category-nav2 .trigger:before,
+.sp-catBox .category-nav2 .trigger:after {
+    background: #b8bec4;
+    border-radius: 4px;
+    content: '';
+    display: block;
+    position: absolute;
+}
+
+.sp-catBox .category-nav2 .trigger:before {
+    height: 14px;
+    right: 13px;
+    top: 5px;
+    width: 2px;
+}
+.sp-catBox .category-nav2 .trigger.open:before {
+    opacity: 0;
+}
+.sp-catBox .category-nav2 .trigger:after {
+    height: 2px;
+    right: 7px;
+    top: 11px;
+    width: 14px;
+}
+
+.drawer.sp .sp-catBox .category-nav2 .trigger:before {
+    height: 18px;
+    right: 16px;
+    top: 6px;
+}
+.drawer.sp .sp-catBox .category-nav2 .trigger:after {
+    right: 8px;
+    top: 14px;
+    width: 18px;
+}
+.sp-catBox .category-nav2 li ul {
+  width: 100%;
+}
+.sp-catBox .category-nav2 li ul,
+.sp-catBox .category-nav2 li li {
+    border-top: rgba(167, 127, 127, 0.59) 1px solid;
+    border-bottom: none;
+}
+.sp-catBox .category-nav2 li ul li:first-child {
+    border-top: none;
+}
+
+.sp-catBox .category-nav2 > li:hover>ul {
+    display: none;
+}
+  .sp-cat2 {
+        display: block;
+    }
+.cate-left{
+padding-bottom:0px;
+}
+@media screen and (max-width: 766px) {
+    .sp-cat2 {
+        display: block;
+    }
+.cate h4{display:none;}
+}
+</style>
+<div class="sp-cat2 drawer_block pc">
+  <div class="row cate-left">
+    <div class="col-sm-12">
+
+      <div id="cate-left" class="item_gallery2 cate">
+        <h4>    カテゴリ一覧</h4>
+        <div class="border">
+          <div class="sp-catBox">
+
+
+            {% macro tree(Category) %}
+			{% if Category.id != 199 %}
+            <li>
+                <a href="{{ url('product_list') }}?category_id={{ Category.id }}">
+                    {{ Category.name }}
+                </a>
+              {% if Category.children|length > 0 %}
+                <span class="trigger"></span>
+                <ul>
+                  {% for ChildCategory in Category.children %}
+                    {{ _self.tree(ChildCategory) }}
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </li>
+			{% endif %}
+            {% endmacro %}
+            <ul class="category-nav2">
+              {% for Category in Categories %}
+              {{ _self.tree(Category) }}
+              {% endfor %}
+            </ul>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function($){
+    $('.sp-catBox .category-nav2 .trigger').on('click',function(){
+        if($(this).hasClass('open')){
+            $(this).removeClass('open');
+            $(this).next().slideUp();
+        }
+        else{
+            $(this).addClass('open');
+            $(this).next().slideDown();
+        }
+    });
+})(jQuery);
+</script>

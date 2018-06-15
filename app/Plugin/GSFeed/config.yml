@@ -1,0 +1,7 @@
+name: Googleショッピングフィード生成
+code: GSFeed
+version: 1.0.3
+service:
+    - GSFeedServiceProvider
+orm.path:
+    - /Resource/doctrine

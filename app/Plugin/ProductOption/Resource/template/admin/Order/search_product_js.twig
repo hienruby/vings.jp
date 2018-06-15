@@ -1,0 +1,205 @@
+{#
+* Plugin Name : ProductOption
+*
+* Copyright (C) 2015 BraTech Co., Ltd. All Rights Reserved.
+* http://www.bratech.co.jp/
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+#}
+
+<script>
+    // 受注明細行を追加する.
+    // 受注明細行のレコード数カウンタ(order_details_count)は, edit.twig側で定義している.
+    function fnAddOrderDetailOption($row, product_id) {
+        // 規格1の要素を取得
+        var $sele1 = $row.find('select[name=classcategory_id1]');
+        // 規格2の要素を取得
+        var $sele2 = $row.find('select[name=classcategory_id2]');
+
+        var product_class_id = null;
+        var price = null;
+        var quantity = 1;
+        var product_code = null;
+        var tax_rate = null;
+
+        // 規格なし商品の場合
+        if (!$sele1.length && !$sele2.length) {
+            var product = productsClassCategories[product_id]['__unselected2']['#'];
+            product_class_id = product['product_class_id'];
+            price = product['price02'];
+            product_code = product['product_code'];
+        // 規格が登録されている商品の場合
+        } else if ($sele1.length) {
+            if ($sele2.length) {
+                var class_category_id1 = $sele1.val();
+                var class_cateogry_id2 = $sele2.val();
+                if (class_category_id1 == '__unselected' || !class_cateogry_id2) {
+                    alert('規格を選択してください。')
+                    return;
+                }
+                var product = productsClassCategories[product_id][class_category_id1]['#' + class_cateogry_id2];
+
+                product_class_id = product['product_class_id'];
+                price = product['price02'];
+            } else {
+                var class_category_id1 = $sele1.val();
+                if (class_category_id1 == '__unselected') {
+                    alert('規格を選択してください。')
+                    return;
+                }
+                var product = productsClassCategories[product_id][class_category_id1]['#'];
+
+                product_class_id = product['product_class_id'];
+                price = product['price02'];
+            }
+        }
+
+        // オプション情報の取得
+        var option_id = null;
+        var options = {};
+
+        var $inputs = $row.find(':input');
+        $inputs.filter('[name^="productoption"]').each( function() {
+            var option_id = $(this).attr('name').replace(/productoption/ig,'');
+            var id = $(this).prop("id");
+            if(id.match(/^productoption\d[\d_]*\d$/)){
+                var type = $(this).attr('type');
+                if(type == 'radio'){
+                    value = $row.find("input[name='productoption" + option_id + "']:checked").val();
+                }else{
+                    value = $(this).val();
+                }
+                options['productoption' + option_id] = value;
+            }
+        });
+
+        // 受注明細行を取得.
+        var list = $('#order_detail_list');
+        var orderDetailExists = false;
+
+        $('*[id^="product_info_list__item--"]').each(function () {
+            var $inputs = $(this).find(':input');
+            if ($inputs.filter('[id$="_ProductClass"][value="'+product_class_id+'"]').length > 0) {
+                var $serial = $inputs.filter('[id$="_serial"]');
+                var serial = $serial.val().trim();
+                targetOptions = $.parseJSON(serial);
+
+                // オプションの比較
+                if(equalObject(options, targetOptions)){
+                    var $quantity = $inputs.filter('[id$="_quantity"]');
+                    var quantity = $quantity.val().trim();
+                    if (quantity.match(/^\d+$/)) {
+                        $quantity.val(parseInt(quantity) + 1);
+                    }
+                    orderDetailExists = true;
+                    return false;
+                }
+            }
+        });
+
+        if (!orderDetailExists) {
+
+            // prototype templateを取得.
+            var newWidget = list.attr('data-prototype');
+            // レコード数カウンタで置換.
+            newWidget = newWidget.replace(/__name__/g, order_details_count);
+            // フォーム入力値をセット
+            $newWidget = $(newWidget);
+            $newWidget.find('#order_OrderDetails_' + order_details_count + '_Product').val(product_id);
+            $newWidget.find('#order_OrderDetails_' + order_details_count + '_ProductClass').val(product_class_id);
+            $newWidget.find('#order_OrderDetails_' + order_details_count + '_price').val(price);
+            $newWidget.find('#order_OrderDetails_' + order_details_count + '_quantity').val(1); // コントローラ側で再取得するため、仮の値をセット
+            $newWidget.find('#order_OrderDetails_' + order_details_count + '_tax_rate').val(8); // コントローラ側で再取得するため、仮の値をセット
+            $newWidget.find('#order_OrderDetails_' + order_details_count + '_serial').val(JSON.stringify(options));
+
+            // 明細行に追加.
+            list.append($newWidget);
+        }
+
+        // 配送商品行を取得.
+        list = $('#shipment_item_list' + shipment_idx);
+
+        // prototype templateを取得.
+        if (typeof(list) !== 'undefined' && list.length > 0) {
+
+            var itemExists = false;
+
+            list.find('*[id^="shipment_item__id--"]').each(function () {
+                var $inputs = $(this).find(':input');
+                if ($inputs.filter('[id$="_ProductClass"][value="'+product_class_id+'"]').length > 0) {
+                    var $serial = $inputs.filter('[id$="_serial"]');
+                    var serial = $serial.val().trim();
+                    targetOptions = $.parseJSON(serial);
+
+                    // オプションの比較
+                    if(equalObject(options, targetOptions)){
+                        var $quantity = $inputs.filter('[id$="_quantity"]');
+                        var quantity = $quantity.val().trim();
+                        if (quantity.match(/^\d+$/)) {
+                            $quantity.val(parseInt(quantity) + 1);
+                        }
+                        itemExists = true;
+                        return false;
+                    }
+                }
+            });
+
+            if (!itemExists) {
+
+                newWidget = list.attr('data-prototype');
+                // レコード数カウンタで置換.
+                newWidget = newWidget.replace(/__name__/g, shipmentItem_idx);
+                // フォーム入力値をセット
+                $newWidget = $(newWidget);
+                $newWidget.find('#order_Shippings_' + shipment_idx + '_ShipmentItems_' + shipmentItem_idx + '_Product').val(product_id);
+                $newWidget.find('#order_Shippings_' + shipment_idx + '_ShipmentItems_' + shipmentItem_idx + '_ProductClass').val(product_class_id);
+                $newWidget.find('#order_Shippings_' + shipment_idx + '_ShipmentItems_' + shipmentItem_idx + '_price').val(price);
+                $newWidget.find('#order_Shippings_' + shipment_idx + '_ShipmentItems_' + shipmentItem_idx + '_quantity').val(1); // コントローラ側で再取得するため、仮の値をセット
+                $newWidget.find('#order_Shippings_' + shipment_idx + '_ShipmentItems_' + shipmentItem_idx + '_serial').val(JSON.stringify(options));
+
+                // 明細行に追加.
+                list.append($newWidget);
+            }
+        }
+
+        if (orderDetailExists) {
+            // カウンタを更新.
+            order_details_count++;
+        }
+
+        // モーダル閉じる.
+        $('#searchProductModal').modal('hide');
+
+        // 再計算のためsubmit.
+        setModeAndSubmit('modal');
+
+        return false;
+    }
+
+    function equalObject(a,b){
+        a = objectSort(a);
+        b = objectSort(b);
+
+        a = JSON.stringify(a);
+        b = JSON.stringify(b);
+
+        return a === b;
+    }
+
+    function objectSort(object) {
+        var sorted = {};
+        var array = [];
+        for (key in object) {
+            if (object.hasOwnProperty(key)) {
+                array.push(key);
+            }
+        }
+        array.sort();
+
+        for (var i = 0; i < array.length; i++) {
+            sorted[array[i]] = object[array[i]];
+        }
+        return sorted;
+    }
+</script>

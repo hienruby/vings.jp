@@ -1,0 +1,31 @@
+2017/08/28 18:45:01[{/index.php}] ******* Exception when add template my page start ******* from {114.164.96.122}
+2017/08/28 18:45:01[{/index.php}] #0 /home/kir021669/public_html/vings.jp/app/Plugin/GmoPaymentGateway/GmoPaymentGateway.php(857): Symfony\Component\DomCrawler\Crawler->children('ul')
+#1 /home/kir021669/public_html/vings.jp/app/Plugin/GmoPaymentGateway/GmoPaymentGateway.php(833): Plugin\GmoPaymentGateway\GmoPaymentGateway->getHtmlMypage(Object(Symfony\Component\HttpFoundation\Request), Object(Symfony\Component\HttpFoundation\RedirectResponse))
+#2 [internal function]: Plugin\GmoPaymentGateway\GmoPaymentGateway->onRenderMypageBefore(Object(Symfony\Component\HttpKernel\Event\FilterResponseEvent), 'eccube.event.re...', Object(Symfony\Component\EventDispatcher\EventDispatcher))
+#3 /home/kir021669/public_html/vings.jp/vendor/symfony/event-dispatcher/EventDispatcher.php(161): call_user_func(Array, Object(Symfony\Component\HttpKernel\Event\FilterResponseEvent), 'eccube.event.re...', Object(Symfony\Component\EventDispatcher\EventDispatcher))
+#4 /home/kir021669/public_html/vings.jp/vendor/symfony/event-dispatcher/EventDispatcher.php(46): Symfony\Component\EventDispatcher\EventDispatcher->doDispatch(Array, 'eccube.event.re...', Object(Symfony\Component\HttpKernel\Event\FilterResponseEvent))
+#5 /home/kir021669/public_html/vings.jp/src/Eccube/Application.php(676): Symfony\Component\EventDispatcher\EventDispatcher->dispatch('eccube.event.re...', Object(Symfony\Component\HttpKernel\Event\FilterResponseEvent))
+#6 [internal function]: Eccube\Application->Eccube\{closure}(Object(Symfony\Component\HttpKernel\Event\FilterResponseEvent), 'kernel.response', Object(Symfony\Component\EventDispatcher\EventDispatcher))
+#7 /home/kir021669/public_html/vings.jp/vendor/symfony/event-dispatcher/EventDispatcher.php(161): call_user_func(Object(Closure), Object(Symfony\Component\HttpKernel\Event\FilterResponseEvent), 'kernel.response', Object(Symfony\Component\EventDispatcher\EventDispatcher))
+#8 /home/kir021669/public_html/vings.jp/vendor/symfony/event-dispatcher/EventDispatcher.php(46): Symfony\Component\EventDispatcher\EventDispatcher->doDispatch(Array, 'kernel.response', Object(Symfony\Component\HttpKernel\Event\FilterResponseEvent))
+#9 /home/kir021669/public_html/vings.jp/vendor/symfony/http-kernel/HttpKernel.php(184): Symfony\Component\EventDispatcher\EventDispatcher->dispatch('kernel.response', Object(Symfony\Component\HttpKernel\Event\FilterResponseEvent))
+#10 /home/kir021669/public_html/vings.jp/vendor/symfony/http-kernel/HttpKernel.php(166): Symfony\Component\HttpKernel\HttpKernel->filterResponse(Object(Symfony\Component\HttpFoundation\RedirectResponse), Object(Symfony\Component\HttpFoundation\Request), 1)
+#11 /home/kir021669/public_html/vings.jp/vendor/symfony/http-kernel/HttpKernel.php(64): Symfony\Component\HttpKernel\HttpKernel->handleRaw(Object(Symfony\Component\HttpFoundation\Request), 1)
+#12 /home/kir021669/public_html/vings.jp/vendor/silex/silex/src/Silex/Application.php(586): Symfony\Component\HttpKernel\HttpKernel->handle(Object(Symfony\Component\HttpFoundation\Request), 1, true)
+#13 /home/kir021669/public_html/vings.jp/vendor/silex/silex/src/Silex/Application.php(563): Silex\Application->handle(Object(Symfony\Component\HttpFoundation\Request))
+#14 /home/kir021669/public_html/vings.jp/html/index.php(51): Silex\Application->run()
+#15 {main} from {114.164.96.122}
+2017/08/28 18:45:01[{/index.php}] ******* Exception when add template my page end ******* from {114.164.96.122}
+2017/08/28 19:09:44[{/index.php}] ******* Data Receiver start ******* from {103.246.39.212}
+2017/08/28 19:09:44[{/index.php}] Array
+(
+)
+ from {103.246.39.212}
+2017/08/28 19:09:44[{/index.php}] ******* Data Receiver end ******* from {103.246.39.212}
+2017/08/28 19:09:45[{/index.php}] ******* Data Receiver start ******* from {113.40.242.178}
+2017/08/28 19:09:45[{/index.php}] Array
+(
+    [eccube] => 9ade0d47e86536c225054b96c8e7d8a3
+)
+ from {113.40.242.178}
+2017/08/28 19:09:45[{/index.php}] ******* Data Receiver end ******* from {113.40.242.178}

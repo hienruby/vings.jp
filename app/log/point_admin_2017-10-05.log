@@ -1,0 +1,1 @@
+[2017-10-05 16:12:01] [74946239] plugin.point.INFO: save start [] {"process_id":15746,"url":"/admin/order/388/mail","ip":"114.164.96.122","http_method":"POST","server":"vings.jp","referrer":"https://vings.jp/admin/order/388/mail","class":"Plugin\\Point\\Event\\WorkPlace\\AdminOrderMail","function":"save","line":84}

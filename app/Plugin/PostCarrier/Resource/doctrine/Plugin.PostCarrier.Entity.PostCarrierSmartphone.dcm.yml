@@ -1,0 +1,24 @@
+Plugin\PostCarrier\Entity\PostCarrierSmartphone:
+    type: entity
+    table: plg_postcarrier_smartphone
+    repositoryClass: Plugin\PostCarrier\Repository\PostCarrierSmartphone
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            column: smartphone_id
+            generator:
+                strategy: AUTO
+    fields:
+        email:
+            type: text
+            nullable: false
+        create_date:
+            type: datetime
+            nullable: false
+        update_date:
+            type: datetime
+            nullable: false
+    lifecycleCallbacks: {  }

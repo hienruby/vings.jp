@@ -1,0 +1,59 @@
+{% extends 'default_frame.twig' %}
+
+{% block main %}
+<style>
+.product_lf{
+display:none;
+}
+
+.page-heading {
+padding-bottom:0;
+margin-bottom: 0;
+}
+.faq-name{
+float: left;
+display: block;
+}
+.faq-name li::before{
+content: "? ";
+color: red;
+}
+.faq-name li{
+    display: block;
+    line-height: 20px;
+}
+ a{
+    color: #563924;
+}
+a:hover{
+    color: red;
+    text-decoration: underline;
+}
+.faq-name span{
+    font-weight: bold;
+    line-height: 20px;
+    background-image: linear-gradient(to bottom, #f5cdb4 , #f9ece3);
+    display: block;
+    padding-left: 8px;
+}
+.faq-name{
+    padding:5px;
+}
+#faq-noidung{
+    margin-top: 5px;
+}
+
+</style>
+    <div id="contents" class="main_only">
+        <div id="privacy_wrap" class="container-fluid1 inner no-padding">
+            <div id="main1">
+                <h1 class="page-heading">サイズに迷ってます。オススメサイズ教えて頂けますか？</h1>
+                <div id="" class="container-fluid">
+					<span class="mediumtext"><p><font face="Arial">仕入先工場に確認いたしますので、ご希望商品ページのお問い合わせや『info@vings.jp』までお問い合わせくださいませ。<br>
+					お問い合わせの際、お客様のヌードサイズ【身長・体重・バスト・ウエスト・ヒップ】もご記入の上、お問い合わせくださいませ。<br>確認にあたり、当店より詳しい内容等確認する場合もございますこと、ご了承くださいませ。
+					</font>    </span>
+				</div><!-- /.col -->
+            </div>
+        </div>
+    </div>
+{% endblock %}

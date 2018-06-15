@@ -1,0 +1,27 @@
+# 新規会員登録 会員情報にメルマガ希望フラグを追加
+front.entry.index.initialize:
+    - [onCustomerEditBefore, NORMAL]
+front.entry.index.complete:
+    - [onFrontCustomerEditAfter, NORMAL]
+eccube.event.render.entry.before:
+    - [onRenderEntryBefore, NORMAL]
+
+# マイページ 会員情報にメルマガ希望フラグを追加
+front.mypage.change.index.initialize:
+    - [onCustomerEditBefore, NORMAL]
+front.mypage.change.index.complete:
+    - [onFrontCustomerEditAfter, NORMAL]
+
+# 会員管理 会員情報にメルマガ希望フラグを追加
+admin.customer.edit.index.initialize:
+    - [onCustomerEditBefore, NORMAL]
+admin.customer.edit.index.complete:
+    - [onCustomerEditAfter, NORMAL]
+
+# 商品の追加をカスタマイズ
+eccube.event.render.admin_order_search_product.before:
+    - [onRenderAdminOrderSearchProductBefore, NORMAL]
+
+# コンバージョンタグ追加
+Shopping/complete.twig:
+    - [onRenderShoppingComplete, NORMAL]

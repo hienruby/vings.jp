@@ -1,0 +1,171 @@
+<style>
+@media only screen and (max-width: 767px){
+.search input[type="search"] {
+    height: 38px;
+}
+.search {
+    position: relative;
+    height: 38px;
+    padding: 0 62px 0 14px;
+    margin-bottom: 15px;
+    background: #fff;
+    overflow: hidden;
+}
+ #search {
+        padding: 0;
+        margin: 10px 0 2px 0;
+border: 1px solid rgb(255, 109, 3);
+        background: rgba(255, 255, 255, 0);
+
+    }
+.extra-form {
+    margin: 0;
+}
+.bt_search {
+height: 40px;
+    background: rgb(255, 109, 3);
+    margin: 0;
+}
+.bt_search .cb-search {
+     fill: #ffffff;
+    font-size: 25px;
+    font-size: 2.5rem;
+    line-height: 30px;
+    padding-right: 0px;
+}
+#search select {
+     width: 400px;
+    max-width: 250px;
+}
+.search select {
+    height: 30px;
+    font-size:12px;
+}
+.search .input_search {
+    height: 30px;
+    padding: 0 50px 0 1em;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+    margin-left: 1%;
+}
+.search input[type="search"] {
+    display: block;
+    width: 100%;
+    padding: 12px 0;
+    border: 0;
+    outline: none;
+    border-radius: 0;
+    font-size: 14px;
+}
+    .newslist dt .cb {
+        font-size: 15px;
+        top: 1px;
+        left: 3px;
+    }
+    .search select {
+        height: 30px;
+    }
+    .search .bt_search {
+        margin-top: 0;
+    }
+    .search .input_search {
+        border-bottom:none;
+    }
+   
+     #category_id{display:none;}
+    .calendar_title, #s8_wellcome, #sales_ranking, .calendar1, .ninki{
+        display:none;
+    }
+    .theme_side_left #main {
+        padding-top: 0px;
+    }
+    .text-success small, .text-info small{
+        float:right;
+        width:100%;
+        padding-right:0;
+        margin-right: 100px;
+    }
+    .category-nav {
+        clear: both;
+        display:none;
+    }
+    .banner{display:none;}
+    .blockmenu {
+        display:none;
+        padding-bottom: -30px;
+        clear: both;
+        position: relative;
+        width: 340px;
+    }
+    .slide{
+        display:none;
+    }
+}
+@media only screen and (min-width: 767px){
+#search select {
+    width: 300px;
+    max-width: 230px;
+}
+#header #searchform select, #header #searchform input {
+    float: left;
+    font-size: 12px;
+    padding-left: 1%;
+}
+.search select {
+    height: 30px;
+padding:0;
+width: 300px;
+    max-width: 300px;
+  }
+.search input[type="search"] {
+    height: 30px;}
+.search .input_search {
+    height: 30px;
+    padding: 0 30px 0 1em;}
+.bt_search {
+    width: 30px;
+    height: 30px;
+}
+.bt_search .cb-search {
+    fill: #636378;
+    font-size: 20px;
+}
+}
+
+</style>
+<script>
+(function($){
+  $(window).on('load',function(){
+    $('.header_bottom_area #category_id option').each(function(){
+      var text = $(this).text();
+      var result = text.substr( 0, 1 );
+  
+      if ( result.match(/　/) ){
+        $(this).remove();
+      }
+    });
+  });
+})(jQuery);
+</script>
+<div class="drawer_block1 pc1 header_bottom_area">
+    <div id="search" class="search">
+        <form method="get" id="searchform" action="{{ path('product_list') }}">
+            <div class="search_inner">
+                {{ form_widget(form.category_id) }}
+                <div class="input_search clearfix">
+                    {{ form_widget(form.name, {'attr': { 'placeholder' : "キーワードを入力" }} ) }}
+                    <button type="submit" class="bt_search"><svg class="cb cb-search"><use xlink:href="#cb-search" /></svg></button>
+                </div>
+            </div>
+            <div class="extra-form">
+                {% for f in form.getIterator %}
+                    {% if f.vars.name matches '[^plg*]' %}
+                        {{ form_label(f) }}
+                        {{ form_widget(f) }}
+                        {{ form_errors(f) }}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </form>
+    </div>
+</div>

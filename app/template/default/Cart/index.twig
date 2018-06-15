@@ -1,0 +1,360 @@
+{% extends 'default_frame.twig' %}
+
+{% set body_class = 'cart_page' %}
+
+{% block main %}
+<style>
+
+.product_lf{
+display:none;
+}
+
+.item_name1 {
+    color: #525263;
+    margin: 0 0 8px;
+    text-align: left;
+    overflow: hidden;
+    width: 100%;
+    padding: 0 10px;
+    line-height: 18px;
+}
+div.table ol li {
+    padding: 8px;
+}
+.btn-info {
+    border-color: saddlebrown;
+    background: #661800;
+}
+.btn-primary {
+    color: #fff;
+    background-color: #fe7434;
+    border-color: initial;
+    border-radius: 5px;
+}
+.page-heading {
+margin:0;
+}
+.col-md-offset-1 {
+    margin-left:0;
+}
+div.table ol li {
+border: 1px solid #ff6666;
+background: #ff9999;
+}
+div.table .tbody {
+      background: rgba(255, 238, 238, 0.52);
+}
+.text-default{width:0px;}
+.item_name1{
+    color: #525263;
+    margin: 0 0 8px;
+    text-align: center;
+    overflow: hidden;
+    width: 100%;
+    padding: 0 10px;
+}
+.item_name1 a{
+color: #593c28;
+}
+.cart_item {
+    margin: 24px 0 16px;
+    border-top: 0 none;
+border: 1px solid rgba(226, 175, 184, 0.77);
+}
+@media only screen and (max-width: 400px){
+.pc-table{
+    display: none;
+}
+div.table {
+
+    display: none;
+}
+.item_photo1{
+width: 40%;
+float: left;
+}
+.item_name1 {
+width: 60%;
+float: left;
+text-align: left;
+line-height: 18px;
+}
+.item_subtotal{
+clear: both;
+}
+.cart_item .item_detail .item_subtotal {
+    display: block;
+    
+}
+.cart_item .item_quantity {
+    width: 100%;
+    clear: both;
+    text-align: right;
+}
+.item_price1{
+float: left;
+}
+.cart_item .item_quantity ul {
+    text-align: right; 
+    white-space: nowrap;
+}
+.cart_item .item_quantity ul li a {
+    border: 2px solid #c9c9c9;
+    text-align: center;
+}
+.cart_item .item_quantity ul li a, .cart_item .item_quantity ul li span {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    vertical-align: middle;
+    border-radius: 50%;
+    text-align: center;
+}
+.item_box {
+border-bottom: 1px solid #e8c1c8;
+padding-top: 10px;
+}
+}
+@media only screen and (min-width: 400px){
+.m-table{
+    display: none;
+}
+}
+</style>
+    <h1 class="page-heading">ショッピングカート</h1>
+    <div id="cart" class="container-fluid">
+        <div id="cart_box" class="row">
+            <div id="cart_box__body" class="col-sm-12 col-md-offset-1">
+                {% if is_granted('ROLE_USER') %}
+                <div id="cart_box__flow_state" class="flowline step3">
+                {% else %}
+                <div id="cart_box__flow_state" class="flowline step4">
+                {% endif %}
+                    <ul id="cart_box__flow_state_list" class="clearfix">
+                        <li class="active"><span class="flow_number">1</span><br>カートの商品</li>
+                    {% if is_granted('ROLE_USER') %}
+                        <li><span class="flow_number">2</span><br>ご注文内容確認</li>
+                        <li><span class="flow_number">3</span><br>完了</li>
+                    {% else %}
+                        <li><span class="flow_number">2</span><br>お客様情報</li>
+                        <li><span class="flow_number">3</span><br>ご注文内容確認</li>
+                        <li><span class="flow_number">4</span><br>完了</li>
+                    {% endif %}
+                    </ul>
+                </div>
+
+                {% set productStr = app.session.flashbag.get('eccube.front.request.product') %}
+                {% for error in app.session.flashbag.get('eccube.front.request.error')  %}
+                    {% set idx = loop.index0 %}
+                    {% if productStr[idx] is defined %}
+                    <div id="cart_box__message--{{ loop.index }}" class="message">
+                        <p class="errormsg bg-danger">
+                            <svg class="cb cb-warning"><use xlink:href="#cb-warning" /></svg>
+                            {{ error|trans({'%product%':productStr[idx]})|nl2br }}
+                        </p>
+                    </div>
+                    {% else %}
+                    <div id="cart_box__message--{{ loop.index }}" class="message">
+                        <p class="errormsg bg-danger">
+                            <svg class="cb cb-warning"><use xlink:href="#cb-warning" /></svg>{{ error|trans|nl2br }}
+                        </p>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                {% for error in app.session.flashbag.get('eccube.front.cart.error')  %}
+                    <div id="cart_box__message_error--{{ loop.index }}" class="message">
+                        <p class="errormsg bg-danger">
+                            <svg class="cb cb-warning"><use xlink:href="#cb-warning" /></svg>{{ error|trans|nl2br }}
+                        </p>
+                    </div>
+                {% endfor %}
+
+                {% if Cart.CartItems|length > 0 %}
+                <form name="form" id="form_cart" method="post" action="{{ url('cart') }}">
+                    <p id="cart_item__info" class="message">
+                        商品の合計金額は「<strong>{{ Cart.total_price|price }}</strong>」です。
+                        {% if BaseInfo.delivery_free_amount and BaseInfo.delivery_free_quantity %}
+                            <br />
+                            {% if is_delivery_free %}
+                                現在送料無料です。
+                            {% else %}
+                                あと「<strong>{{ least|price }}</strong>」または「<strong>{{ quantity|number_format }}個</strong>」のお買い上げで<strong class="text-primary">送料無料</strong>になります。
+                            {% endif %}
+                        {% elseif BaseInfo.delivery_free_amount %}
+                            <br />
+                            {% if is_delivery_free %}
+                                現在送料無料です。
+                            {% else %}
+                                あと「<strong>{{ least|price }}</strong>」のお買い上げで<strong class="text-primary">送料無料</strong>になります。
+                            {% endif %}
+                        {% elseif BaseInfo.delivery_free_quantity %}
+                            <br />
+                            {% if is_delivery_free %}
+                                現在送料無料です。
+                            {% else %}
+                                あと「<strong>{{ quantity|number_format }}個</strong>」のお買い上げで<strong class="text-primary">送料無料</strong>になります。
+                            {% endif %}
+                        {% endif %}
+                    </p>
+                    <div id="cart_item_list" class="cart_item  pc-table table">
+                        <div class="thead">
+                            <ol id="cart_item_list__header">
+                                <li id="cart_item_list__header_cart_remove">削除</li>
+                                <li id="cart_item_list__header_product_detail">商品内容</li>
+                                <li id="cart_item_list__header_total">数量</li>
+                                <li id="cart_item_list__header_sub_total">小計</li>
+                            </ol>
+                        </div>
+                        <div id="cart_item_list__body" class="tbody">
+
+                            {% for CartItem in Cart.CartItems %}
+                                {% set ProductClass = CartItem.Object %}
+                                {% set Product = ProductClass.Product %}
+
+                                <div id="cart_item_list__item" class="item_box tr">
+                                    <div id="cart_item_list__cart_remove" class="icon_edit td">
+                                        <a href="{{ url('cart_remove', {'productClassId': ProductClass.id }) }}" {{ csrf_token_for_anchor() }} data-method="put" data-message="カートから商品を削除してもよろしいですか?">
+                                            <svg class="cb cb-close"><use xlink:href="#cb-close" /></svg>
+                                        </a>
+                                    </div>
+                                    <div class="td table">
+                                        <div id="cart_item_list__product_image" class="item_photo">
+                                            <a  target="_blank" href="{{ url('product_detail', {id : Product.id} ) }}">
+                                                <img src="{{ app.config.image_save_urlpath }}/{{ Product.MainListImage|no_image_product }}" alt="{{ Product.name }}" />
+                                            </a>
+                                        </div>
+                                        <dl class="item_detail">
+                                            <dt id="cart_item_list__product_detail" class="item_name1 text-default">
+                                                <a target="_blank" href="{{ url('product_detail', {id : Product.id} ) }}">{{ Product.name }}</a>
+                                            </dt>
+                                            <dd id="cart_item_list__class_category" class="item_pattern small">
+                                                {% if ProductClass.ClassCategory1 and ProductClass.ClassCategory1.id %}
+                                                    {{ ProductClass.ClassCategory1.ClassName }}：{{ ProductClass.ClassCategory1 }}
+                                                {% endif %}
+                                                {% if ProductClass.ClassCategory2 and ProductClass.ClassCategory2.id %}
+                                                    <br>{{ ProductClass.ClassCategory2.ClassName }}：{{ ProductClass.ClassCategory2 }}
+                                                {% endif %}
+                                            </dd>
+                                            <dd id="cart_item_list__item_price" class="item_price">￥{{ CartItem.price|number_format }}</dd>
+                                            <dd id="cart_item_list__item_subtotal" class="item_subtotal">小計：￥{{ CartItem.total_price|number_format }}</dd>
+                                        </dl>
+                                    </div>
+                                    <div id="cart_item_list__quantity" class="item_quantity td">
+                                        {{ CartItem.quantity|number_format }}
+                                        <ul id="cart_item_list__quantity_edit">
+                                            <li>
+                                                {% if CartItem.quantity > 1 %}
+                                                    <a id="cart_item_list__down" href="{{ url('cart_down', {'productClassId': ProductClass.id}) }}" {{ csrf_token_for_anchor() }} data-method="put" data-confirm="false"><svg class="cb cb-minus"><use xlink:href="#cb-minus" /></svg></a>
+                                                {% else %}
+                                                    <span><svg class="cb cb-minus"><use xlink:href="#cb-minus" /></svg></span>
+                                                {% endif %}
+                                            </li>
+                                            <li>
+                                                <a id="cart_item_list__up" href="{{ url('cart_up', {'productClassId': ProductClass.id}) }}" {{ csrf_token_for_anchor() }} data-method="put" data-confirm="false"><svg class="cb cb-plus"><use xlink:href="#cb-plus" /></svg></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div id="cart_item_list__subtotal" class="item_subtotal td">￥{{ CartItem.total_price|number_format }}</div>
+                                </div><!--/item_box-->
+                            {% endfor %}
+
+                        </div>
+                    </div><!--/cart_item-->
+
+
+
+ <div id="" class=" cart_item m-table">
+                        <div id="cart_item_list__body" class="">
+
+                            {% for CartItem in Cart.CartItems %}
+                                {% set ProductClass = CartItem.Object %}
+                                {% set Product = ProductClass.Product %}
+
+                                <div id="cart_item_list__item" class="item_box ">
+                                    <div id="cart_item_list__cart_remove" class="icon_edit ">
+                                        <a href="{{ url('cart_remove', {'productClassId': ProductClass.id }) }}" {{ csrf_token_for_anchor() }} data-method="put" data-message="カートから商品を削除してもよろしいですか?">
+                                            <svg class="cb cb-close"><use xlink:href="#cb-close" /></svg>
+                                        </a>
+                                    </div>
+                                    <div class="">
+                                        <div id="cart_item_list__product_image" class="item_photo1">
+                                            <a  target="_blank" href="{{ url('product_detail', {id : Product.id} ) }}">
+                                                <img src="{{ app.config.image_save_urlpath }}/{{ Product.MainListImage|no_image_product }}" alt="{{ Product.name }}" />
+                                            </a>
+                                        </div>
+                                        <div class="item_detail">
+                                            <div id="cart_item_list__product_detail" class="item_name1 text-default">
+                                                <a target="_blank" href="{{ url('product_detail', {id : Product.id} ) }}">{{ Product.name }}</a>
+                                           
+                                            <div id="cart_item_list__class_category" class="item_pattern small">
+                                                {% if ProductClass.ClassCategory1 and ProductClass.ClassCategory1.id %}
+                                                    {{ ProductClass.ClassCategory1.ClassName }}：{{ ProductClass.ClassCategory1 }}
+                                                {% endif %}
+                                                {% if ProductClass.ClassCategory2 and ProductClass.ClassCategory2.id %}
+                                                    <br>{{ ProductClass.ClassCategory2.ClassName }}：{{ ProductClass.ClassCategory2 }}
+                                                {% endif %}
+                                            </div>
+                                            <div id="cart_item_list__item_price" class="item_price1">価値：￥{{ CartItem.price|number_format }}</div> <br>
+                                            <!--<div id="cart_item_list__item_subtotal" class="item_subtotal">小計：￥{{ CartItem.total_price|number_format }}</div>-->
+                                       
+                                    </div>
+                                    <div id="cart_item_list__quantity" class="item_quantity ">
+                                        {{ CartItem.quantity|number_format }}
+                                        <ul id="cart_item_list__quantity_edit">
+                                            <li>
+                                                {% if CartItem.quantity > 1 %}
+                                                    <a id="cart_item_list__down" href="{{ url('cart_down', {'productClassId': ProductClass.id}) }}" {{ csrf_token_for_anchor() }} data-method="put" data-confirm="false"><svg class="cb cb-minus"><use xlink:href="#cb-minus" /></svg></a>
+                                                {% else %}
+                                                    <span><svg class="cb cb-minus"><use xlink:href="#cb-minus" /></svg></span>
+                                                {% endif %}
+                                            </li>
+                                            <li>
+                                                <a id="cart_item_list__up" href="{{ url('cart_up', {'productClassId': ProductClass.id}) }}" {{ csrf_token_for_anchor() }} data-method="put" data-confirm="false"><svg class="cb cb-plus"><use xlink:href="#cb-plus" /></svg></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    </div>
+                                    </div>
+                                    <!--div id="cart_item_list__subtotal" class="item_subtotal ">￥{{ CartItem.total_price|number_format }}</div>-->
+                                </div>
+                                <!--/item_box-->
+                            {% endfor %}
+
+                        </div>
+                    </div><!--/cart_item-->
+
+
+
+
+
+                    <div class="total_box">
+                        <dl id="total_box__total_price" class="total_price">
+                            <dt>合計：</dt>
+                            <dd class="text-primary">￥{{ Cart.total_price|number_format }}</dd>
+                        </dl>
+                        <div id="total_box__user_action_menu" class="btn_group">
+
+                            <p id="total_box__next_button" >
+                                <a href="{{ path('cart_buystep') }}" class="btn btn-primary btn-block">レジに進む</a>
+                            </p>
+                            <p id="total_box__top_button">
+                                <a  href="{{ url('top') }}" class="btn btn-info btn-block">お買い物を続ける</a>
+                            </p>
+                        </div>
+                    </div>
+
+                </form>
+                {% else %}
+                <div id="cart_box__message" class="message">
+                    <p class="errormsg bg-danger">
+                        <svg class="cb cb-warning"><use xlink:href="#cb-warning" /></svg>現在カート内に商品はございません。
+                    </p>
+                </div>
+                {% endif %}
+
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+
+</div>
+{% endblock %}

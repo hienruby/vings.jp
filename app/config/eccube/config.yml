@@ -1,0 +1,11 @@
+auth_magic: sRWPsDUWAFeM9GAnW6Zp70kbrgG8eP97
+password_hash_algos: sha256
+shop_name: vings
+force_ssl: 1
+admin_allow_host: null
+cookie_lifetime: 0
+cookie_name: eccube
+locale: ja
+timezone: Asia/Tokyo
+pageinrange: false
+eccube_install: 1

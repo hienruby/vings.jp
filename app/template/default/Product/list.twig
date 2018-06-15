@@ -1,0 +1,226 @@
+{% extends 'default_frame.twig' %}
+
+{% set body_class = 'product_page' %}
+
+{% block javascript %}
+    <script>
+        // 並び順を変更
+        function fnChangeOrderBy(orderby) {
+            eccube.setValue('orderby', orderby);
+            eccube.setValue('pageno', 1);
+            eccube.submitForm();
+        }
+
+        // 表示件数を変更
+        function fnChangeDispNumber(dispNumber) {
+            eccube.setValue('disp_number', dispNumber);
+            eccube.setValue('pageno', 1);
+            eccube.submitForm();
+        }
+        // 商品表示BOXの高さを揃える
+        $(window).load(function() {
+            $('.product_item').matchHeight();
+        });
+    </script>
+{% endblock %}
+
+{% block main %}
+    <form name="form1" id="form1" method="get" action="?">
+        {{ form_widget(search_form) }}
+    </form>
+    <!-- ▼topicpath▼ -->
+<style>
+.product_lf{
+display:none;
+}
+#topicpath li a {
+    color: #593c28;
+}
+#h-list{
+padding-bottom:0;
+}
+.pagination ul li.active a:hover, .pagination ul li.active a:focus {
+opacity:0.8;
+background-color: #6c402c;
+}
+.pagination {
+    width: 100%;
+    margin: 0;
+    height: 43px;
+    border-bottom: 1px solid #afadad;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+.pagination ul {
+    padding: 5px 0;
+    float: right;
+}
+.pagination ul li a {
+    padding: 4px 1em;
+  border: 1px solid #888b90;
+} 
+.pagination ul li.active a {
+    cursor: default;
+    text-decoration: none;
+color: #fff;
+   background-color: #6c402c;
+}
+#topicpath {
+    padding: 0px 16px;
+    border: 0 none;
+}
+.product_page .product_item {
+    padding-bottom: 5px;
+}
+.form-control {
+    height: 25px;
+    padding: 0 8px;
+font-size:13px;
+}
+.product_page .product_item a {
+    padding-bottom: 0;
+}
+.item_gallery {
+    clear: both;
+}
+ .product_item {
+/* box-shadow */
+box-shadow:0px 0px 6px 3px #5bd7c8;
+-moz-box-shadow:0px 0px 6px 3px #5bd7c8;
+ -webkit-box-shadow: 1px 1px 6px 2px rgb(195, 183, 183);
+margin-bottom:20px;
+padding-bottom:0px;
+height:auto;
+
+/* border-radius */
+border-radius:6px;
+-moz-border-radius:6px;
+-webkit-border-radius:6px;
+/* border */
+}
+.item_photo {
+    padding: 0 10px;
+}
+.item_name {
+    color: #525263;
+    margin: 0 0 8px;
+    text-align: center;
+    overflow: hidden;
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+padding: 0 10px;
+font-weight: bold;
+}
+.item_price {
+    color: #525263;
+    font-weight: bold;
+    text-align: center;
+    color: #e60d0d;
+}
+
+.intro {
+    margin: 0;
+    padding-top: 0.5em;
+    padding-bottom: 10px;
+}
+</style>
+
+<div id="h-list" class="row"> 
+    <div id="topicpath" class="">
+        <ol id="list_header_menu">
+            <li><a href="{{ url('product_list') }}">全商品</a></li>
+            {% if Category is not null %}
+                {% for Path in Category.path %}
+                    <li><a href="{{ url('product_list') }}?category_id={{ Path.id }}">{{ Path.name }}</a></li>
+                {% endfor %}
+            {% endif %}
+            {% if search_form.vars.value.name %}
+            <li>「{{ search_form.vars.value.name }}」の検索結果</li>
+            {% endif %}
+        </ol>
+    </div>
+    <!-- ▲topicpath▲ -->
+    <div id="result_info_box" class="">
+        <form name="page_navi_top" id="page_navi_top" action="?">
+            <p id="result_info_box__item_count" class="intro col-sm-6"><strong><span id="productscount">{{ pagination.totalItemCount }}</span>件</strong>の商品がみつかりました。
+            </p>
+
+            <div id="result_info_box__menu_box" class="col-sm-6 no-padding">
+                <ul id="result_info_box__menu" class="pagenumberarea clearfix">
+                    <li id="result_info_box__disp_menu">
+                        {{ form_widget(disp_number_form, {'id': '', 'attr': {'onchange': "javascript:fnChangeDispNumber(this.value);"}}) }}
+                    </li>
+                    <li id="result_info_box__order_menu">
+                        {{ form_widget(order_by_form, {'id': '', 'attr': {'onchange': "javascript:fnChangeOrderBy(this.value);"}}) }}
+                    </li>
+                </ul>
+            </div>
+
+            {% for f in disp_number_form.getIterator %}
+                {% if f.vars.name matches '[^plg*]' %}
+                    {{ form_label(f) }}
+                    {{ form_widget(f) }}
+                    {{ form_errors(f) }}
+                {% endif %}
+            {% endfor %}
+
+            {% for f in order_by_form.getIterator %}
+                {% if f.vars.name matches '[^plg*]' %}
+                    {{ form_label(f) }}
+                    {{ form_widget(f) }}
+                    {{ form_errors(f) }}
+                {% endif %}
+            {% endfor %}
+        </form>
+    </div>
+    <!-- ▼item_list▼ -->
+    <div id="item_list">
+        <div class="col-sm-12 no-padding">
+            {% for Product in pagination %}
+                <div id="result_list_box--{{ Product.id }}" class="col-sm-3 col-xs-6">
+                    <div id="result_list__item--{{ Product.id }}" class="product_item">
+                        <a href="{{ url('product_detail', {'id': Product.id}) }}">
+                            <div id="result_list__image--{{ Product.id }}" class="item_photo">
+                                <img src="{{ app.config.image_save_urlpath }}/{{ Product.main_list_image|no_image_product }}" alt="{{Product.name}}">
+                            </div>
+                            <dl id="result_list__detail--{{ Product.id }}">
+                               <!-- <dt id="result_list__name--{{ Product.id }}" class="item_name">{{ Product.name }}</dt>-->
+                              <h4 class="h-name">
+                              <script>
+                              <!--
+                              var x = "{{Product.name}}";
+                              document.write(x.slice(0,18)); //-->
+                              </script>
+                              </h4>
+                                {% if Product.description_list %}
+                                    <dd id="result_list__description_list--{{ Product.id }}" class="item_comment">{{ Product.description_list|raw|nl2br }}</dd>
+                                {% endif %}
+                                {% if Product.hasProductClass %}
+                                    {% if Product.getPrice02Min == Product.getPrice02Max %}
+                                    <dd id="result_list__price02_inc_tax--{{ Product.id }}" class="item_price">
+                                      {{ Product.getPrice02IncTaxMin|price }}
+                                    </dd>
+                                    {% else %}
+                                    <dd id="result_list__price02_inc_tax--{{ Product.id }}" class="item_price">
+                                            {{ Product.getPrice02IncTaxMin|price }} ～ {{ Product.getPrice02IncTaxMax|price }}
+                                    </dd>
+                                    {% endif %}
+                                {% else %}
+                                    <dd id="result_list__price02_inc_tax--{{ Product.id }}" class="item_price">
+ {{ Product.getPrice02IncTaxMin|price }}</dd>
+                                {% endif %}
+                            </dl>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+</div>
+    </div>
+    <!-- ▲item_list▲ -->
+    {% if pagination.totalItemCount > 0 %}
+
+        {% include "pagination.twig" with { 'pages' : pagination.paginationData } %}
+    {% endif %}
+{% endblock %}

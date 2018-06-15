@@ -1,0 +1,79 @@
+{% extends 'default_frame.twig' %}
+
+{% block main %}
+<style>
+.product_lf{
+display:none;
+}
+
+.page-heading {
+padding-bottom:0;
+margin-bottom: 0;
+}
+.faq-name{
+float: left;
+display: block;
+}
+.faq-name li::before{
+content: "? ";
+color: red;
+}
+.faq-name li{
+    display: block;
+    line-height: 20px;
+}
+ a{
+    color: #563924;
+}
+a:hover{
+    color: red;
+    text-decoration: underline;
+}
+.faq-name span{
+    font-weight: bold;
+    line-height: 20px;
+    background-image: linear-gradient(to bottom, #f5cdb4 , #f9ece3);
+    display: block;
+    padding-left: 8px;
+}
+.faq-name{
+    padding:5px;
+}
+#faq-noidung{
+    margin-top: 5px;
+}
+
+</style>
+    <div id="contents" class="main_only">
+        <div id="privacy_wrap" class="container-fluid1 inner no-padding">
+            <div id="main1">
+                <h1 class="page-heading">お支払い方法</h1>
+                <div id="" class="container-fluid">
+					<span class="mediumtext"><p><font face="Arial">お支払い金額は、商品代金と配送料（手数料等を含む）の合計となります。<br>
+お支払い方法は下記となります。<br>
+<p># ゆうちょ振込<br>
+# 銀行振込<br>
+# クレジットカード</p>
+■銀行・ゆうちょ振込（前払い）<br>
+必ず、受注確認メールをお受け取りいただいてから、お支払いくださいますようお願いいたします。<br>
+ご請求額のお振込確認後、入荷手続きへとなります。<br>
+※振込手数料はお客様負担でお願いいたします。<br><br>
+
+お振込み期限は、ご注文確認メールが届いた日にちから、
+平日営業日の３日～５日間以内となります。(土日・祝日は含まれません)<br>
+また、万が一、上記お振込期限までにお振込みが難しい場合は、当店までご連絡くださいませ。<br><br>
+
++++++ご注意+++++<br>
+ご入金者名は、ご注文をいただいた際のお名前でお願いいたします。<br>
+ご注文者名とご入金者名が異なる場合、入金確認に時間がかかる場合がございますので、<br>
+お名前が異なる場合は、必ずメールにてご連絡をお願いいたします。<br><br>
+
+■クレジットカード<br>
+当サイト取り扱いクレジットカードは、MasterCard、VISAとJCBとなります。 <br>
+
+					</font>    </span>
+				</div><!-- /.col -->
+            </div>
+        </div>
+    </div>
+{% endblock %}

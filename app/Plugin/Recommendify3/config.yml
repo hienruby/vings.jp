@@ -1,0 +1,5 @@
+name: この商品を買った人はこんな商品も買っていますプラグイン for EC-CUBE3
+code: Recommendify3
+version: 1.0.1
+service:
+    - Recommendify3ServiceProvider

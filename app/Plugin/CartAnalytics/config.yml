@@ -1,0 +1,8 @@
+name: CartAnalytics
+event: CartAnalyticsEvent
+code: CartAnalytics
+version: 0.0.2
+service:
+    - CartAnalyticsServiceProvider
+orm.path:
+    - /Resource/doctrine

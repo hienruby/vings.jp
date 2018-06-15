@@ -1,0 +1,158 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) 2000-2015 LOCKON CO.,LTD. All Rights Reserved.
+
+http://www.lockon.co.jp/
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#}
+<style>
+/*.cart-trigger, .nav-trigger , p.cart-trigger a, #header #cart_area .cart_price {  
+    height: 35px;
+line-height: 35px;
+}*/
+
+
+#cart .inner {
+padding:0;
+}
+#cart_area p {
+     border: none;
+}
+
+.sp-nav {display: none;}
+.sp-nav:after {
+    clear: both;
+    content: '';
+    display: block;
+    height: 0;
+    overflow: hidden;
+}
+.sp-nav li {
+    background: rgba(170, 149, 109, 0.46);
+    border-color: #333;
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 2px;
+    box-sizing: border-box;
+    box-shadow: 1px 1px 1px 1px rgba(74, 15, 41, 0.52);
+    float: left;
+    height: 30px;
+    padding: 0;
+    width: 33%;
+}
+.sp-nav li:not(:first-child) {
+    margin-left: 0.5%;
+}
+.sp-nav li a {
+    color: #000 !important;
+    display: block;
+    font-weight: bold;
+    height: 100%;
+    line-height: 28px;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.sp-nav #cart_area {
+    display: none;
+    background: none;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    position: static;
+}
+
+.sp-nav #cart_area a {
+    margin: auto;
+    width: auto;
+}
+
+.sp-nav #cart_area p.cart-trigger {
+    position: static;
+    right: auto;
+}
+
+
+.sp-nav p.cart-trigger .cb-close {
+    opacity: 0;
+    left: auto;
+    right: 80px;
+    top: 6px;
+}
+
+.sp-nav p.cart-trigger.cart-is-visible .cb-close {
+    opacity: 1;
+}
+.spnav-btn img {
+    position: relative;
+    bottom: 3px;
+}
+@media screen and (max-width: 767px) {
+    #cart_area {display: none;}
+    .sp-nav,
+    .sp-nav #cart_area {
+        display: block;
+    }
+}
+</style>
+<script>
+(function($){
+  $(window).on('load',function(){
+    $('.spnav-btn #cart_area .bottom-scroll').on('click', function(){
+      $("html,body").animate({
+        scrollTop : 0
+      });
+
+    });
+  });
+})(jQuery);
+</script>
+<div class="botan">
+<ul class="sp-nav">
+    
+    <li class="spnav-btn home">
+        <a href="/">
+<img src="/user_data/images/home.png">
+         ホーム
+        </a>
+    </li>
+    <li class="spnav-btn">
+        <div id="cart_area">
+            <p class="clearfix cart-trigger bottom-scroll">
+                <a href="#cart">
+<img src="/user_data/images/shopping-cart-black-shape.png">
+                  カート
+                    <svg class="cb cb-close"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#cb-close"></use></svg>
+                </a>
+                </p>
+                </div>
+    </li>
+    <li class="spnav-btn">
+    {% if is_granted('ROLE_USER') %}
+        <a href="{{ url('logout') }}">
+            <img src="/user_data/images/key.png">
+          ログアウト
+        </a>
+    {% else %}
+        <a href="{{ url('mypage_login') }}">
+            <img src="/user_data/images/key.png">
+          ログイン
+        </a>
+    {% endif %}
+    </li>
+</ul><!-- /.sp-nav -->
+</div>

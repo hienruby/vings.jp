@@ -1,0 +1,220 @@
+<style>
+.category-nav1 span {
+width: 100%;
+color: #333;
+background: rgb(255, 192, 203);
+padding-top: 4px;
+border-radius: 5px 5px 0px 0;
+border-bottom: 1px sol;
+box-shadow: 1px 1px 1px 1px #9b7c88;
+text-align: center;
+display: block;
+line-height: 30px;
+}
+.category-nav1 {
+border:none;
+text-align: left;
+border-right: rgba(167, 127, 127, 0.59) 1px solid;
+}
+#category1 {
+line-height: 20px;
+padding: 0px;
+margin-bottom:10px;
+}
+.category-nav1 li ul {
+padding-left:10px;
+width: 100%;
+}
+.category-nav1 li {
+background-image:url("/user_data/images/bak1.png") top no-repeat;
+position: relative;
+display: block;
+border-bottom: rgba(167, 127, 127, 0.59) 1px solid;
+border-top:none;
+}
+ .category-nav1 li ul, .category-nav1 li ul li ul{
+display:none;
+}
+.category-nav1 > li:hover > a {}
+    .category-nav1 > li:hover li:hover > a { background: rgba(192, 156, 87, 0.44);}
+ .category-nav1 > li:hover li:hover > ul {  display:block;}
+ .category-nav1 > li:hover>ul{display:block;}
+    .category-nav1 > li:hover > ul > li {
+      display:block
+        height: 50px;
+    }
+.category-nav1 li > a {
+padding-left: 10px;
+font-size:13px;
+line-height:30px;
+color:black;
+display:block;
+font-size: 12px;
+    }
+.category-nav1 li > a:hover{ background: rgba(192, 156, 87, 0.44);}
+.category-nav1 li {
+background-image: url(/user_data/images/bar.png);
+background-repeat:no-repeat;
+ background-size: 5px 35px;
+}
+.category-nav1 li a:after {
+        position: absolute;
+        content: "+";
+        top: 0;
+        width: 0;
+        height: 0;
+right:15px;
+    }
+
+.category-nav1 li ul li  a:after { content: " ";}
+
+.sp-cat {display: none;}
+
+.sp-cat .category-nav1 li,
+.sp-cat .category-nav1 li a {
+  line-height: 35px;
+    font-size: 15px;
+}
+
+.sp-cat .category-nav1 li a {
+    display: inline-block;
+    margin: 0 0 0 10px;
+    padding: 0;
+    position: relative;
+    z-index: 2;
+}
+.sp-cat .category-nav1 li a:hover,
+.sp-cat .category-nav1 li:hover a {
+    background: none;
+}
+
+.sp-cat .category-nav1 li a:after {
+    display: none;
+}
+
+.sp-catBox .category-nav1 span {
+    background: none;
+    border: none;
+    box-shadow: none;
+    height: 24px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100%;
+}
+
+.sp-catBox .category-nav1 .trigger:before {
+    background: #b8bec4;
+    border-radius: 4px;
+    content: '';
+    display: block;
+    height: 18px;
+    right: 18px;
+    position: absolute;
+    top: 3px;
+    width: 2px;
+}
+.sp-catBox .category-nav1 .trigger.open:before {
+    opacity: 0;
+}
+.sp-catBox .category-nav1 .trigger:after {
+    background: #b8bec4;
+    border-radius: 4px;
+    content: '';
+    display: block;
+    height: 2px;
+    right: 10px;
+    position: absolute;
+    top: 11px;
+    width: 18px;
+}
+
+.sp-catBox .category-nav1 > li:hover li:hover > a,
+.sp-catBox .category-nav1 li > a:hover{ background: none;}
+
+.sp-catBox .category-nav1 li ul,
+.sp-catBox .category-nav1 li li {
+    border-top: rgba(167, 127, 127, 0.59) 1px solid;
+    border-bottom: none;
+}
+.sp-catBox .category-nav1 li ul li:first-child {
+    border-top: none;
+}
+
+.sp-catBox .category-nav1 > li:hover>ul {
+    display: none;
+}
+
+@media screen and (max-width: 767px) {
+.item_gallery3 h4{
+background: url(/user_data/bak/bak8.png);
+ height: 35px;
+    line-height: 35px;
+    padding-left: 15px;
+    border-radius: 5px 5px 0 0;
+box-shadow: 1px 1px 1px 1px rgba(107, 29, 34, 0.83);
+margin:2px 0;
+font-size: 15px;
+color: #fff;
+}
+    .sp-cat {
+        display: block;
+    }
+}
+</style>
+
+<div class="sp-cat">
+  <div class="row">
+    <div class="col-sm-12">
+
+      <div class="item_gallery3">
+        <h4><img src="/user_data/icon/tags-1.png">  カテゴリ一覧</h4>
+        <div class="border">
+          <div class="sp-catBox">
+
+
+            {% macro tree(Category) %}
+			{% if Category.id != 199 %}
+            <li>
+                <a href="{{ url('product_list') }}?category_id={{ Category.id }}">
+                    {{ Category.name }}
+                </a>
+              {% if Category.children|length > 0 %}
+                <span class="trigger"></span>
+                <ul>
+                  {% for ChildCategory in Category.children %}
+                    {{ _self.tree(ChildCategory) }}
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </li>
+			{% endif %}
+            {% endmacro %}
+
+            <ul class="category-nav1">
+              {% for Category in Categories %}
+              {{ _self.tree(Category) }}
+              {% endfor %}
+            </ul>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function($){
+    $('.sp-catBox .category-nav1 .trigger').on('click',function(){
+        if($(this).hasClass('open')){
+            $(this).removeClass('open');
+            $(this).next().slideUp();
+        }
+        else{
+            $(this).addClass('open');
+            $(this).next().slideDown();
+        }
+    });
+})(jQuery);
+</script>

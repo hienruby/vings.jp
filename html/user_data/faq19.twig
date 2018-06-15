@@ -1,0 +1,66 @@
+{% extends 'default_frame.twig' %}
+
+{% block main %}
+<style>
+.product_lf{
+display:none;
+}
+
+.page-heading {
+padding-bottom:0;
+margin-bottom: 0;
+}
+.faq-name{
+float: left;
+display: block;
+}
+.faq-name li::before{
+content: "? ";
+color: red;
+}
+.faq-name li{
+    display: block;
+    line-height: 20px;
+}
+ a{
+    color: #563924;
+}
+a:hover{
+    color: red;
+    text-decoration: underline;
+}
+.faq-name span{
+    font-weight: bold;
+    line-height: 20px;
+    background-image: linear-gradient(to bottom, #f5cdb4 , #f9ece3);
+    display: block;
+    padding-left: 8px;
+}
+.faq-name{
+    padding:5px;
+}
+#faq-noidung{
+    margin-top: 5px;
+}
+
+</style>
+    <div id="contents" class="main_only">
+        <div id="privacy_wrap" class="container-fluid1 inner no-padding">
+            <div id="main1">
+                <h1 class="page-heading">注文と同じサイズの衣装が届いたんですが、サイズが合わないので、返品交換できますか？</h1>
+                <div id="" class="container-fluid">
+					<span class="mediumtext"><p><font face="Arial">お客様都合での返品・交換等につきましては、原則お受けしておりません。<br>
+サイズ違い、イメージと合わない等のお客様のご都合による返品、交換の場合、往復送料（着払い、送料無料サービス分も追加徴収）はお客様にてご負担、交換・返金手数料（商品代金の５０％～）を頂戴させていただいております。<br>
+ご返金につきましては、手数料を差し引いた商品代金のみをご返金させていただいておりますので、お支払いいただいた料金全額のご返金はかなわないことをご了承ください。<br>
+また、受注製品につきましては、手数料は商品代金の６５％～となりますこと、ご了承くださいませ。<br>
+ご返品の場合、お客様負担にてご返送をお願いします。<br>
+着払いにご返送頂いた場合、返金額から着払い送料も含めての返金対応とさせて頂きますので、ご注意ください。
+<br>返品・交換につきましては、商品ご到着後一週間以内に当店までご連絡をお願いいたします。<br>
+それ以降の場合、クーリングオフ対象外となりますので、ご対応受付が出来かねますこと、ご了承くださいませ。<br>
+
+					</font>    </span>
+				</div><!-- /.col -->
+            </div>
+        </div>
+    </div>
+{% endblock %}
